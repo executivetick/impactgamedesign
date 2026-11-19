@@ -49,6 +49,8 @@ To edit any page on GitHub, open the file, click the **pencil** icon, make the c
 4. **Commit.** The game appears in the Arcade, with its own page, in about a minute.
 
 **Scratch games** don't need a folder. Use `play: { type: "scratch", src: "https://scratch.mit.edu/projects/123456789/embed" }`.
+**Code.org Game Lab, App Lab or Sprite Lab games** don't need a folder either. The student clicks **Share** in Code.org and copies the link. Use `play: { type: "codeorg", src: "https://studio.code.org/projects/gamelab/XXXXXXX" }` with `aspect: "1/1"` for Game Lab (App Lab: `"2/3"`). The site plays it with the code hidden and adds an **Open on Code.org** button. If a student's Share button won't give a link, sharing is turned off for their account: check the Sharing column in your Code.org section's roster.
+
 **Games already on itch.io:** use `play: { type: "itch", src: "https://itch.io/embed-upload/XXXXXXX" }`, copied from the game's itch.io **Distribute → Embed game** page.
 
 To feature a game on the Home page, set `featured: true` on that game and `false` on the others.
@@ -79,3 +81,20 @@ GitHub limits single files to 100 MB, and the whole site should stay under 1 GB.
 ## Preview on your own computer
 
 Opening `index.html` by double-clicking works for every page. Some browsers block games that load from your own disk, so to test a game locally, run `python3 -m http.server` in this folder and open `http://localhost:8000`.
+
+---
+
+## Set up the AI tutors (AI Tutor Assistant page)
+
+The page has four tutors: Blender, Code.org Game Lab, Code.org App Lab, and Unity/C#. Each tutor's instructions are in `assets/js/tutors.js`. A public website can't safely hold an AI account key, so each tutor runs as a **Google Gemini Gem** made with your school account.
+
+For each tutor:
+1. Go to [gemini.google.com](https://gemini.google.com) with your school account → **Gems** → **New Gem**.
+2. Name it, such as "Code to Create — Unity & C# Tutor".
+3. Copy that tutor's `instructions` text from `tutors.js` (or click **Copy tutor setup** on the live page) and paste it into the Gem's **Instructions** box. Optional: under **Knowledge**, add your own handouts or rubrics.
+4. Save, then **Share** the Gem with your district (or your class) and copy the link.
+5. In `tutors.js`, paste the link into that tutor's `link: ""` and commit.
+
+Until a tutor has a link, the page shows **Copy tutor setup** and **Open Gemini**. Students paste the setup as their first message, and the tutor still works.
+
+Check with district IT that Gemini (and Gem sharing) is turned on for student accounts, and add your class AI policy where the page says `[Link or short version of your policy]`.

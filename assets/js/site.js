@@ -29,7 +29,18 @@ var C2C = {
     if (play.type === 'local' && /^games\/[a-z0-9\-_/.]+$/i.test(s) && s.indexOf('..') < 0) return s;
     if (play.type === 'itch' && /^https:\/\/(itch\.io|[a-z0-9-]+\.itch\.io|html-classic\.itch\.zone)\//i.test(s)) return s;
     if (play.type === 'scratch' && /^https:\/\/scratch\.mit\.edu\/projects\/\d+\/embed/i.test(s)) return s;
+    if (play.type === 'codeorg') return C2C.codeorgEmbed(s);
     return '';
+  },
+  // Code.org Game Lab / App Lab / Sprite Lab: accepts the share link, the embed link,
+  // or the whole <iframe> code, and turns it into a play-only embed link.
+  codeorgEmbed: function (s) {
+    var m = String(s).match(/https:\/\/studio\.code\.org\/projects\/(gamelab|applab|spritelab)\/([A-Za-z0-9_\-]+)/i);
+    return m ? 'https://studio.code.org/projects/' + m[1].toLowerCase() + '/' + m[2] + '/embed?nosource' : '';
+  },
+  codeorgShare: function (s) {
+    var m = String(s).match(/https:\/\/studio\.code\.org\/projects\/(gamelab|applab|spritelab)\/([A-Za-z0-9_\-]+)/i);
+    return m ? 'https://studio.code.org/projects/' + m[1].toLowerCase() + '/' + m[2] + '/?nosource' : '';
   },
   card: function (g) {
     var e = C2C.esc;
