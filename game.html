@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Game — Code to Create Arcade</title>
+  <meta name="description" content="A student-made game from the Code to Create Arcade.">
+  <meta property="og:title" content="Game — Code to Create Arcade">
+  <meta property="og:description" content="A student-made game from the Code to Create Arcade.">
+  <meta name="theme-color" content="#0B1F3A">
+  <link rel="icon" type="image/png" href="assets/img/favicon-64.png">
+  <link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/site.css">
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+  <header class="site-header">
+    <div class="bar">
+      <a class="brand" href="index.html"><img src="assets/img/logo-code-to-create.png" alt="Code to Create — Game Design at IMPACT" width="600" height="160"></a>
+      <button class="menu-btn" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="Menu">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+      </button>
+      <nav class="nav" id="site-nav" aria-label="Main">
+        <a href="index.html">Home</a>
+        <a href="pathway.html">The Pathway</a>
+        <a href="arcade.html" aria-current="page">Student Arcade</a>
+        <a href="publish.html">Publish Your Game</a>
+        <a href="jams.html">Game Jams</a>
+        <a href="about.html">About</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="dark">
+      <div class="wrap stack" style="padding-top:48px;padding-bottom:52px;gap:10px">
+        <a href="arcade.html" style="color:#DCE4EF;font-weight:600;text-decoration:none">&larr; Student Arcade</a>
+        <span class="eyebrow" id="g-eyebrow">Student Arcade</span>
+        <h1 id="g-title" style="font-size:clamp(32px,5vw,48px)">Loading&hellip;</h1>
+        <p class="lead" id="g-studio"></p>
+      </div>
+    </section>
+    <section class="gray">
+      <div class="wrap stack" style="gap:24px;padding-top:40px">
+        <div class="player" id="g-player"></div>
+        <div class="btns" style="justify-content:space-between;align-items:center">
+          <p class="small">Click inside the game first, then use your keyboard.</p>
+          <div class="btns">
+            <button class="btn btn-line" type="button" id="g-full">Full screen</button>
+            <a class="btn btn-red btn-sm" id="g-feedback" href="#" target="_blank" rel="noopener" hidden>Give the team feedback</a>
+          </div>
+        </div>
+        <div class="row" style="align-items:flex-start;gap:24px">
+          <div class="panel stack"><h2 style="font-size:24px">About the game</h2><p id="g-pitch" class="sub"></p>
+            <dl class="meta" style="margin:0"><dt>How to play</dt><dd id="g-controls"></dd><dt>Genre &middot; Engine &middot; Course</dt><dd id="g-tags"></dd></dl>
+            <a id="g-devlog" href="#" target="_blank" rel="noopener" hidden>Read the dev log &rarr;</a></div>
+          <div class="panel stack"><h2 style="font-size:24px">The studio</h2>
+            <dl class="meta" style="margin:0"><dt>Studio</dt><dd id="g-studio2"></dd><dt>Team</dt><dd id="g-team"></dd><dt>Credits</dt><dd id="g-credits"></dd></dl></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <div class="stack" style="gap:6px">
+        <img src="assets/img/logo-code-to-create.png" alt="" width="600" height="160">
+        <span>Game Design Pathway &middot; IMPACT Center for Leadership &amp; Innovation</span>
+        <span>Warren County Public Schools</span>
+      </div>
+      <div class="stack" style="gap:4px">
+        <strong>[Teacher name], Game Design Instructor</strong>
+        <span>[Room / lab number]</span>
+        <a href="mailto:[school email]">[school email]</a>
+      </div>
+      <div class="stack" style="gap:4px">
+        <a href="https://impactcenter.warrencountyschools.org/">IMPACT Center website</a>
+        <span>&copy; <span id="year">2026</span> Code to Create</span>
+      </div>
+    </div>
+  </footer>
+  <script src="assets/js/games.js"></script>
+  <script src="assets/js/site.js"></script>
+  <script>
+    (function () {
+      var id = new URLSearchParams(location.search).get('id');
+      var g = C2C.games().filter(function (x) { return x.id === id; })[0];
+      function set(i, t) { document.getElementById(i).textContent = t || ''; }
+      if (!g) { set('g-title', 'Game not found'); set('g-studio', 'It may have moved. Head back to the Arcade.'); document.getElementById('g-player').hidden = true; return; }
+      document.title = g.title + ' — Code to Create Arcade';
+      set('g-title', g.title); set('g-studio', 'by ' + g.studio); set('g-eyebrow', 'Student Arcade · ' + (g.year || ''));
+      set('g-pitch', g.pitch); set('g-controls', g.controls); set('g-tags', [g.genre, g.engine, g.course].join(' · '));
+      set('g-studio2', g.studio); set('g-team', g.team); set('g-credits', g.credits);
+      var p = document.getElementById('g-player'); p.style.aspectRatio = g.aspect || '16/9';
+      var src = C2C.safeSrc(g.play);
+      if (src) {
+        var f = document.createElement('iframe');
+        f.src = src; f.title = g.title; f.setAttribute('allow', 'fullscreen; autoplay; gamepad'); f.allowFullscreen = true;
+        p.appendChild(f);
+        document.getElementById('g-full').addEventListener('click', function () { (f.requestFullscreen || f.webkitRequestFullscreen || function(){}).call(f); });
+      } else {
+        p.innerHTML = '<div class="ph" style="height:100%;border-radius:0">This game\'s play link is missing or not allowed. Check its "play" entry in games.js.</div>';
+        document.getElementById('g-full').hidden = true;
+      }
+      if (g.devlog) { var d = document.getElementById('g-devlog'); d.href = g.devlog; d.hidden = false; }
+      if (g.feedback) { var fb = document.getElementById('g-feedback'); fb.href = g.feedback; fb.hidden = false; }
+    })();
+  </script>
+</body>
+</html>

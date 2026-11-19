@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Student Arcade — Code to Create</title>
+  <meta name="description" content="Play games designed and built by IMPACT Game Design students.">
+  <meta property="og:title" content="Student Arcade — Code to Create">
+  <meta property="og:description" content="Play games designed and built by IMPACT Game Design students.">
+  <meta name="theme-color" content="#0B1F3A">
+  <link rel="icon" type="image/png" href="assets/img/favicon-64.png">
+  <link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/site.css">
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+  <header class="site-header">
+    <div class="bar">
+      <a class="brand" href="index.html"><img src="assets/img/logo-code-to-create.png" alt="Code to Create — Game Design at IMPACT" width="600" height="160"></a>
+      <button class="menu-btn" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="Menu">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+      </button>
+      <nav class="nav" id="site-nav" aria-label="Main">
+        <a href="index.html">Home</a>
+        <a href="pathway.html">The Pathway</a>
+        <a href="arcade.html" aria-current="page">Student Arcade</a>
+        <a href="publish.html">Publish Your Game</a>
+        <a href="jams.html">Game Jams</a>
+        <a href="about.html">About</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="dark">
+      <div class="wrap stack" style="padding-top:64px;padding-bottom:68px">
+        <span class="eyebrow">#CodeToCreate &middot; Student Arcade</span>
+        <h1>Made at IMPACT. Play it now.</h1>
+        <p class="lead">Every game here was designed, built and published by IMPACT students. Pick one, play it in your browser, and leave the team some feedback.</p>
+      </div>
+    </section>
+
+    <section class="gray">
+      <div class="wrap stack" style="gap:24px;padding-top:40px">
+        <div class="filters" id="genres" role="group" aria-label="Filter by genre"><strong style="color:var(--navy);margin-right:6px">Genre</strong></div>
+        <div class="toolbar">
+          <div class="field"><label for="q">Search</label><input id="q" type="search" placeholder="Title or studio"></div>
+          <div class="field"><label for="engine">Engine</label><select id="engine"><option value="">All engines</option></select></div>
+          <div class="field"><label for="course">Course</label><select id="course"><option value="">All courses</option></select></div>
+        </div>
+        <p class="small" id="count" aria-live="polite"></p>
+        <div class="grid" id="games" style="grid-template-columns:repeat(auto-fill,minmax(260px,1fr))"></div>
+        <div class="panel" style="border:2px dashed #C5D0DE;box-shadow:none;display:flex;flex-wrap:wrap;gap:16px;align-items:center;justify-content:space-between">
+          <div><h2 style="font-size:22px">Are you an IMPACT developer?</h2><p class="small">Finished a build? Get it into the Arcade.</p></div>
+          <a class="btn btn-navy" href="publish.html">Publish your game</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <div class="stack" style="gap:6px">
+        <img src="assets/img/logo-code-to-create.png" alt="" width="600" height="160">
+        <span>Game Design Pathway &middot; IMPACT Center for Leadership &amp; Innovation</span>
+        <span>Warren County Public Schools</span>
+      </div>
+      <div class="stack" style="gap:4px">
+        <strong>[Teacher name], Game Design Instructor</strong>
+        <span>[Room / lab number]</span>
+        <a href="mailto:[school email]">[school email]</a>
+      </div>
+      <div class="stack" style="gap:4px">
+        <a href="https://impactcenter.warrencountyschools.org/">IMPACT Center website</a>
+        <span>&copy; <span id="year">2026</span> Code to Create</span>
+      </div>
+    </div>
+  </footer>
+  <script src="assets/js/games.js"></script>
+  <script src="assets/js/site.js"></script>
+  <script>
+    (function () {
+      var games = C2C.games();
+      var state = { genre: 'All', q: '', engine: '', course: '' };
+      function uniq(key) { var o = []; games.forEach(function (g) { if (g[key] && o.indexOf(g[key]) < 0) o.push(g[key]); }); return o.sort(); }
+      var gBox = document.getElementById('genres');
+      ['All'].concat(uniq('genre')).forEach(function (name) {
+        var b = document.createElement('button');
+        b.type = 'button'; b.className = 'filter-btn'; b.textContent = name; b.dataset.g = name;
+        b.addEventListener('click', function () { state.genre = name; render(); });
+        gBox.appendChild(b);
+      });
+      [['engine', 'engine'], ['course', 'course']].forEach(function (pair) {
+        var sel = document.getElementById(pair[0]);
+        uniq(pair[1]).forEach(function (v) { var o = document.createElement('option'); o.value = v; o.textContent = v; sel.appendChild(o); });
+        sel.addEventListener('change', function () { state[pair[0]] = sel.value; render(); });
+      });
+      document.getElementById('q').addEventListener('input', function (e) { state.q = e.target.value.toLowerCase(); render(); });
+      function render() {
+        gBox.querySelectorAll('button').forEach(function (b) { b.setAttribute('aria-pressed', b.dataset.g === state.genre ? 'true' : 'false'); });
+        var list = games.filter(function (g) {
+          return (state.genre === 'All' || g.genre === state.genre) &&
+                 (!state.engine || g.engine === state.engine) &&
+                 (!state.course || g.course === state.course) &&
+                 (!state.q || (g.title + ' ' + g.studio).toLowerCase().indexOf(state.q) >= 0);
+        });
+        document.getElementById('count').textContent = 'Showing ' + list.length + ' of ' + games.length + ' game' + (games.length === 1 ? '' : 's');
+        document.getElementById('games').innerHTML = list.length ? list.map(C2C.card).join('') : '<div class="empty">No games match those filters yet.</div>';
+      }
+      render();
+    })();
+  </script>
+</body>
+</html>

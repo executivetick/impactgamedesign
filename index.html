@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Code to Create — Game Design at IMPACT</title>
+  <meta name="description" content="Code to Create: the Game Design pathway at the IMPACT Center for Leadership and Innovation. Play student-made games and explore the pathway.">
+  <meta property="og:title" content="Code to Create — Game Design at IMPACT">
+  <meta property="og:description" content="Code to Create: the Game Design pathway at the IMPACT Center for Leadership and Innovation. Play student-made games and explore the pathway.">
+  <meta name="theme-color" content="#0B1F3A">
+  <link rel="icon" type="image/png" href="assets/img/favicon-64.png">
+  <link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/site.css">
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+  <header class="site-header">
+    <div class="bar">
+      <a class="brand" href="index.html"><img src="assets/img/logo-code-to-create.png" alt="Code to Create — Game Design at IMPACT" width="600" height="160"></a>
+      <button class="menu-btn" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="Menu">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+      </button>
+      <nav class="nav" id="site-nav" aria-label="Main">
+        <a href="index.html" aria-current="page">Home</a>
+        <a href="pathway.html">The Pathway</a>
+        <a href="arcade.html">Student Arcade</a>
+        <a href="publish.html">Publish Your Game</a>
+        <a href="jams.html">Game Jams</a>
+        <a href="about.html">About</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="dark">
+      <div class="wrap row" style="padding-top:80px;padding-bottom:88px">
+        <div class="stack" style="gap:20px;flex:1 1 560px">
+          <span class="eyebrow">#CodeToCreate &middot; Game Design Pathway &middot; IMPACT Center</span>
+          <h1>Design your game.<br>Design your future.</h1>
+          <p class="lead">Students design, code, art-direct and publish original games &mdash; then put them in front of real players. This is where the pathway lives and where student games go live.</p>
+          <div class="btns" style="margin-top:8px">
+            <a class="btn btn-red" href="arcade.html">Play student games</a>
+            <a class="btn btn-ghost" href="pathway.html">Explore the pathway</a>
+          </div>
+        </div>
+        <!-- PHOTO: put a photo at assets/img/hero.jpg, then replace this div with:
+             <img src="assets/img/hero.jpg" alt="Students playtesting in the game design lab" style="border-radius:16px;width:100%"> -->
+        <div class="ph">[Photo: students playtesting in the game design lab]</div>
+      </div>
+    </section>
+
+    <section class="red-band">
+      <div class="wrap tight grid" style="gap:40px;grid-template-columns:repeat(auto-fit,minmax(300px,1fr))">
+        <div class="stack" style="gap:8px"><span class="eyebrow">Our mission</span>
+          <p class="statement">Develop skilled creators, innovators and leaders prepared for college, careers and life.</p></div>
+        <div class="stack" style="gap:8px"><span class="eyebrow">Our vision</span>
+          <p class="statement">Equip students with technical and essential skills through game design.</p></div>
+      </div>
+    </section>
+
+    <section class="gray">
+      <div class="wrap stack" style="gap:32px">
+        <div class="stack" style="gap:8px">
+          <h2>Start here</h2>
+          <p class="sub">Three doors, three audiences: future students and families, players, and our own developers.</p>
+        </div>
+        <div class="grid">
+          <a class="card" href="pathway.html"><img class="wide" src="assets/img/card-pathway.webp" alt="" width="1200" height="750" loading="lazy">
+            <div class="body"><h3>The Pathway</h3><p>Course sequence, skills, certifications and the careers they lead to. Built for 8th graders choosing an academy &mdash; and their parents.</p><span class="more">See the courses &rarr;</span></div></a>
+          <a class="card" href="arcade.html"><img class="wide" src="assets/img/card-arcade.webp" alt="" width="1200" height="750" loading="lazy">
+            <div class="body"><h3>Student Arcade</h3><p>Every published student game, playable right in the browser. Filter by genre, engine and course.</p><span class="more">Play now &rarr;</span></div></a>
+          <a class="card" href="publish.html"><img class="wide" src="assets/img/card-publish.webp" alt="" width="1200" height="750" loading="lazy">
+            <div class="body"><h3>Publish Your Game</h3><p>For IMPACT developers: the launch checklist, the submission form, and what happens after you hit submit.</p><span class="more">Submit a build &rarr;</span></div></a>
+        </div>
+      </div>
+    </section>
+
+    <section id="featured" hidden>
+      <div class="wrap row" style="align-items:flex-start">
+        <div class="player" id="featured-player"></div>
+        <div class="stack" style="flex:1 1 320px">
+          <span class="eyebrow">Featured game</span>
+          <h2 id="featured-title"></h2>
+          <p class="small" id="featured-studio"></p>
+          <p class="sub" id="featured-pitch" style="font-size:16px"></p>
+          <div class="chips" id="featured-chips"></div>
+          <div class="btns"><a class="btn btn-navy btn-sm" id="featured-link" href="arcade.html">Game page &amp; credits</a></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="gray">
+      <div class="wrap stack" style="gap:32px">
+        <h2>How a game gets made here</h2>
+        <div class="grid four">
+          <div class="card"><img class="wide" src="assets/img/step-1-pitch.webp" alt="" width="800" height="500" loading="lazy"><div class="body"><h3>Pitch</h3><p>Teams form a studio, define roles, and pitch a concept to a panel.</p></div></div>
+          <div class="card"><img class="wide" src="assets/img/step-2-prototype.webp" alt="" width="800" height="500" loading="lazy"><div class="body"><h3>Prototype</h3><p>Paper first, then a playable core loop. Find the fun fast.</p></div></div>
+          <div class="card"><img class="wide" src="assets/img/step-3-playtest.webp" alt="" width="800" height="500" loading="lazy"><div class="body"><h3>Playtest</h3><p>Real players, real feedback &mdash; classmates, other academies, families.</p></div></div>
+          <div class="card"><img class="wide" src="assets/img/step-4-publish.webp" alt="" width="800" height="500" loading="lazy"><div class="body"><h3>Publish</h3><p>Ship it to the Student Arcade with a dev log and credits.</p></div></div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="wrap stack" style="gap:24px">
+        <h2>Coming up</h2>
+        <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:20px">
+          <div class="event"><div class="date">[DATE]</div><div><h3 style="font-size:18px">Code to Create Game Jam</h3><p class="small">48 hours, one theme, cross-academy teams welcome.</p></div></div>
+          <div class="event"><div class="date">[DATE]</div><div><h3 style="font-size:18px">Family Playtest Night</h3><p class="small">Families play student builds and leave feedback cards.</p></div></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <div class="stack" style="gap:6px">
+        <img src="assets/img/logo-code-to-create.png" alt="" width="600" height="160">
+        <span>Game Design Pathway &middot; IMPACT Center for Leadership &amp; Innovation</span>
+        <span>Warren County Public Schools</span>
+      </div>
+      <div class="stack" style="gap:4px">
+        <strong>[Teacher name], Game Design Instructor</strong>
+        <span>[Room / lab number]</span>
+        <a href="mailto:[school email]">[school email]</a>
+      </div>
+      <div class="stack" style="gap:4px">
+        <a href="https://impactcenter.warrencountyschools.org/">IMPACT Center website</a>
+        <span>&copy; <span id="year">2026</span> Code to Create</span>
+      </div>
+    </div>
+  </footer>
+  <script src="assets/js/games.js"></script>
+  <script src="assets/js/site.js"></script>
+  <script>
+    (function () {
+      var g = C2C.games().filter(function (x) { return x.featured; })[0];
+      var src = g && C2C.safeSrc(g.play);
+      if (!g || !src) return;
+      var e = C2C.esc;
+      document.getElementById('featured').hidden = false;
+      var p = document.getElementById('featured-player');
+      p.style.aspectRatio = g.aspect || '16/9';
+      p.innerHTML = '<iframe src="' + e(src) + '" title="' + e(g.title) + '" loading="lazy" allow="fullscreen; autoplay; gamepad" allowfullscreen></iframe>';
+      document.getElementById('featured-title').textContent = g.title;
+      document.getElementById('featured-studio').textContent = 'by ' + g.studio;
+      document.getElementById('featured-pitch').textContent = g.pitch;
+      document.getElementById('featured-chips').innerHTML = [g.genre, g.engine, g.course].map(function (t) { return '<span class="chip">' + e(t) + '</span>'; }).join('');
+      document.getElementById('featured-link').href = 'game.html?id=' + encodeURIComponent(g.id);
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Publish Your Game — Code to Create</title>
+  <meta name="description" content="Launch checklist and submission steps for IMPACT game developers.">
+  <meta property="og:title" content="Publish Your Game — Code to Create">
+  <meta property="og:description" content="Launch checklist and submission steps for IMPACT game developers.">
+  <meta name="theme-color" content="#0B1F3A">
+  <link rel="icon" type="image/png" href="assets/img/favicon-64.png">
+  <link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/site.css">
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+  <header class="site-header">
+    <div class="bar">
+      <a class="brand" href="index.html"><img src="assets/img/logo-code-to-create.png" alt="Code to Create — Game Design at IMPACT" width="600" height="160"></a>
+      <button class="menu-btn" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="Menu">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+      </button>
+      <nav class="nav" id="site-nav" aria-label="Main">
+        <a href="index.html">Home</a>
+        <a href="pathway.html">The Pathway</a>
+        <a href="arcade.html">Student Arcade</a>
+        <a href="publish.html" aria-current="page">Publish Your Game</a>
+        <a href="jams.html">Game Jams</a>
+        <a href="about.html">About</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="dark">
+      <div class="wrap stack" style="padding-top:64px;padding-bottom:68px">
+        <span class="eyebrow">#CodeToCreate &middot; For IMPACT developers</span>
+        <h1>Ship it.</h1>
+        <p class="lead">Publishing is part of the job. Run the launch checklist, submit your build, and your game goes live in the Student Arcade after review.</p>
+      </div>
+    </section>
+
+    <section>
+      <div class="wrap stack" style="gap:28px">
+        <h2>Five steps to launch</h2>
+        <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px">
+          <div class="step" style="background:var(--gray)"><span class="num">1</span><h3>Export a web build</h3><p>Unity / Godot / GDevelop: an HTML5 or WebGL export. Scratch: share the project.</p></div>
+          <div class="step" style="background:var(--gray)"><span class="num">2</span><h3>Zip it</h3><p>Zip the whole build folder. <code>index.html</code> must be at the top level of the zip.</p></div>
+          <div class="step" style="background:var(--gray)"><span class="num">3</span><h3>Submit the form</h3><p>Upload the zip, cover image, pitch, controls and credits.</p></div>
+          <div class="step" style="background:var(--gray)"><span class="num">4</span><h3>Teacher review</h3><p>Checked against the launch checklist. Fixes come back as feedback.</p></div>
+          <div class="step" style="background:var(--gray)"><span class="num">5</span><h3>Live in the Arcade</h3><p>Your game gets its own page, playable right in the browser.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="gray">
+      <div class="wrap row" style="align-items:flex-start">
+        <div class="stack">
+          <h2>Launch checklist</h2>
+          <p class="small">Every box checked before you submit.</p>
+          <div class="panel"><ul class="checklist">
+            <li>Playable start to finish &mdash; no soft-locks or crashes</li>
+            <li>Title screen with controls and how to play</li>
+            <li>Credits screen &mdash; every team member and every borrowed asset, with its license</li>
+            <li>School-appropriate content</li>
+            <li>No personal info &mdash; first name and last initial only</li>
+            <li>Cover image, 630 &times; 500, made from the cover template</li>
+            <li>Build size under 100 MB</li>
+            <li>Playtested by at least three people outside your team</li>
+          </ul></div>
+        </div>
+        <div class="stack">
+          <h2>Submit your build</h2>
+          <p class="sub" style="font-size:16px">Have your zipped build, cover image and credits ready. You'll sign in with your school account.</p>
+          <div class="btns">
+            <!-- EDIT: replace FORM-ID with your Google Form's link -->
+            <a class="btn btn-red" href="https://forms.gle/FORM-ID" target="_blank" rel="noopener">Open the submission form</a>
+            <a class="btn btn-line" href="assets/img/game-cover-template.png" download>Download the cover template</a>
+          </div>
+          <div class="panel stack" style="gap:10px">
+            <h3>Unity WebGL settings</h3>
+            <p class="small">Player Settings &rarr; Publishing Settings: set <strong>Compression Format</strong> to <strong>Disabled</strong>, or keep Gzip and tick <strong>Decompression Fallback</strong>. Without this, the build won't load on our site.</p>
+          </div>
+          <p class="small">Questions? Ask [Teacher name] in [Room / lab number] or email [school email].</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <div class="stack" style="gap:6px">
+        <img src="assets/img/logo-code-to-create.png" alt="" width="600" height="160">
+        <span>Game Design Pathway &middot; IMPACT Center for Leadership &amp; Innovation</span>
+        <span>Warren County Public Schools</span>
+      </div>
+      <div class="stack" style="gap:4px">
+        <strong>[Teacher name], Game Design Instructor</strong>
+        <span>[Room / lab number]</span>
+        <a href="mailto:[school email]">[school email]</a>
+      </div>
+      <div class="stack" style="gap:4px">
+        <a href="https://impactcenter.warrencountyschools.org/">IMPACT Center website</a>
+        <span>&copy; <span id="year">2026</span> Code to Create</span>
+      </div>
+    </div>
+  </footer>
+  <script src="assets/js/games.js"></script>
+  <script src="assets/js/site.js"></script>
+</body>
+</html>
