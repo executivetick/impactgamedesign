@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pixel Dodge (sample)</title>
+<style>
+  html, body { margin: 0; height: 100%; background: #0B1F3A; overflow: hidden; }
+  canvas { display: block; width: 100%; height: 100%; }
+</style>
+</head>
+<body>
+<canvas id="c" width="960" height="540" tabindex="0" aria-label="Pixel Dodge game"></canvas>
+<script>
+/* Pixel Dodge — a tiny sample game for the Code to Create Arcade.
+   Students' real games replace this folder's contents with their own build. */
+var c = document.getElementById('c'), x = c.getContext('2d');
+var W = 960, H = 540, keys = {}, best = 0, s;
+function reset() { s = { px: W / 2, blocks: [], t: 0, score: 0, over: false, started: s ? true : false }; }
+reset();
+addEventListener('keydown', function (e) {
+  keys[e.key] = true;
+  if (e.key === ' ') { if (s.over || !s.started) { reset(); s.started = true; } e.preventDefault(); }
+  if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') e.preventDefault();
+});
+addEventListener('keyup', function (e) { keys[e.key] = false; });
+c.addEventListener('pointerdown', function (e) {
+  c.focus();
+  if (!s.started || s.over) { reset(); s.started = true; return; }
+  var r = c.getBoundingClientRect(); s.target = (e.clientX - r.left) / r.width * W;
+});
+function step() {
+  if (s.started && !s.over) {
+    s.t++; s.score = Math.floor(s.t / 6);
+    var sp = 7;
+    if (keys.ArrowLeft || keys.a || keys.A) { s.px -= sp; s.target = null; }
+    if (keys.ArrowRight || keys.d || keys.D) { s.px += sp; s.target = null; }
+    if (s.target != null) s.px += Math.max(-sp, Math.min(sp, s.target - s.px));
+    s.px = Math.max(20, Math.min(W - 20, s.px));
+    var rate = Math.max(6, 26 - Math.floor(s.t / 240));
+    if (s.t % rate === 0) s.blocks.push({ x: Math.random() * (W - 40), y: -40, v: 3 + Math.random() * 3 + s.t / 900, red: Math.random() < .25 });
+    s.blocks.forEach(function (b) { b.y += b.v; });
+    s.blocks = s.blocks.filter(function (b) { return b.y < H + 40; });
+    s.blocks.forEach(function (b) {
+      if (b.x < s.px + 16 && b.x + 36 > s.px - 16 && b.y < H - 40 && b.y + 36 > H - 72) { s.over = true; best = Math.max(best, s.score); }
+    });
+  }
+  draw(); requestAnimationFrame(step);
+}
+function draw() {
+  x.fillStyle = '#0B1F3A'; x.fillRect(0, 0, W, H);
+  x.fillStyle = '#13294A';
+  for (var gx = 0; gx < W; gx += 40) for (var gy = 0; gy < H; gy += 40) if ((gx * 7 + gy * 13) % 9 === 0) x.fillRect(gx + 4, gy + 4, 32, 32);
+  s.blocks.forEach(function (b) { x.fillStyle = b.red ? '#C8102E' : '#1F5FAD'; x.fillRect(b.x, b.y, 36, 36); });
+  x.fillStyle = '#FFFFFF';
+  x.beginPath(); x.moveTo(s.px, H - 72); x.lineTo(s.px + 18, H - 40); x.lineTo(s.px - 18, H - 40); x.closePath(); x.fill();
+  x.fillStyle = '#C8102E'; x.fillRect(0, H - 8, W, 8);
+  x.font = 'bold 22px system-ui, sans-serif'; x.fillStyle = '#FFFFFF'; x.textAlign = 'left';
+  x.fillText('SCORE ' + s.score, 20, 36); x.textAlign = 'right'; x.fillText('BEST ' + best, W - 20, 36);
+  if (!s.started || s.over) {
+    x.fillStyle = 'rgba(11,31,58,.82)'; x.fillRect(0, 0, W, H);
+    x.textAlign = 'center'; x.fillStyle = '#FFFFFF';
+    x.font = '800 56px system-ui, sans-serif'; x.fillText(s.over ? 'GAME OVER' : 'PIXEL DODGE', W / 2, H / 2 - 30);
+    x.font = '22px system-ui, sans-serif'; x.fillStyle = '#DCE4EF';
+    x.fillText(s.over ? 'Score ' + s.score + '  ·  Space or click to play again' : 'Arrow keys or A / D to move  ·  Space or click to start', W / 2, H / 2 + 20);
+    x.fillStyle = '#FF8A9B'; x.font = 'bold 16px system-ui, sans-serif'; x.fillText('#CodeToCreate sample game', W / 2, H / 2 + 64);
+  }
+}
+step();
+</script>
+</body>
+</html>
