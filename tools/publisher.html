@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Game Publisher — Code to Create (teacher only)</title>
+<link rel="icon" type="image/png" href="../assets/img/favicon-64.png">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/site.css">
+<style>
+  .tool { max-width: 1100px; margin: 0 auto; padding: 32px 24px 80px; display: flex; flex-direction: column; gap: 24px; }
+  .form-grid { display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
+  .field textarea { font: 15px var(--font-body); padding: 11px 12px; border: 1px solid #C5D0DE; border-radius: 8px; min-height: 84px; resize: vertical; }
+  .field .hint { font-size: 13px; color: var(--muted); }
+  .seg { display: flex; flex-wrap: wrap; gap: 8px; }
+  .seg label { display: flex; align-items: center; gap: 8px; border: 2px solid var(--line); border-radius: 10px; padding: 10px 14px; cursor: pointer; font-weight: 600; min-height: 44px; }
+  .seg input { accent-color: var(--red); }
+  .seg label:has(input:checked) { border-color: var(--navy); background: var(--chip); }
+  .msg { border-radius: 10px; padding: 12px 16px; font-size: 15px; }
+  .msg.ok { background: #E7F5EC; color: #13532F; border: 1px solid #A9D8B8; }
+  .msg.warn { background: #FFF6E0; color: #6B4A00; border: 1px solid #F1D48A; }
+  .msg.err { background: #FDECEE; color: #7E0A1D; border: 1px solid #F3B5BF; }
+  table.games { width: 100%; border-collapse: collapse; font-size: 15px; }
+  table.games th, table.games td { text-align: left; padding: 10px 8px; border-bottom: 1px solid var(--line); vertical-align: middle; }
+  table.games th { font-size: 13px; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; }
+  table.games img { width: 63px; height: 50px; object-fit: cover; border-radius: 6px; background: var(--navy); }
+  .row-actions { display: flex; gap: 6px; flex-wrap: wrap; }
+  .row-actions button { font: 600 13px var(--font-body); padding: 8px 12px; min-height: 36px; border-radius: 8px; border: 1px solid #C5D0DE; background: #fff; color: var(--navy); cursor: pointer; }
+  .row-actions button.danger { color: var(--red-dark); border-color: #F3B5BF; }
+  progress { width: 100%; height: 14px; accent-color: var(--red); }
+  .cover-preview { width: 252px; aspect-ratio: 630/500; border-radius: 10px; background: var(--navy) center/cover no-repeat; border: 1px solid var(--line); }
+  .pill { display: inline-block; font-size: 12px; font-weight: 700; background: var(--red); color: #fff; padding: 2px 8px; border-radius: 999px; }
+  [hidden] { display: none !important; }
+</style>
+</head>
+<body>
+<header class="site-header" style="position:static">
+  <div class="bar">
+    <a class="brand" href="../index.html"><img src="../assets/img/logo-code-to-create.png" alt="Code to Create" width="600" height="160"></a>
+    <span style="color:#DCE4EF;font-weight:700">Game Publisher &middot; teacher only</span>
+  </div>
+</header>
+
+<main class="tool">
+
+  <!-- ===================== 1. CONNECT ===================== -->
+  <section class="panel stack" id="connect-panel">
+    <h2 style="font-size:26px">1 &middot; Connect to GitHub</h2>
+    <p class="small">One-time setup on each computer. Your token is saved only in this browser on this computer; it's never put on the website.
+      <a href="#token-help">How do I get a token?</a></p>
+    <div class="form-grid">
+      <div class="field"><label for="owner">GitHub username</label><input id="owner" value="executivetick" autocomplete="off"></div>
+      <div class="field"><label for="repo">Repository</label><input id="repo" value="impactgamedesign" autocomplete="off"></div>
+      <div class="field"><label for="branch">Branch</label><input id="branch" value="main" autocomplete="off"></div>
+      <div class="field"><label for="token">Access token</label><input id="token" type="password" placeholder="github_pat_…" autocomplete="off"></div>
+    </div>
+    <div class="btns">
+      <button class="btn btn-navy" type="button" id="connect-btn">Connect &amp; load games</button>
+      <button class="btn btn-line" type="button" id="forget-btn">Forget token on this computer</button>
+    </div>
+    <div id="connect-msg"></div>
+  </section>
+
+  <!-- ===================== 2. GAMES ===================== -->
+  <section class="panel stack" id="list-panel" hidden>
+    <div style="display:flex;flex-wrap:wrap;gap:12px;justify-content:space-between;align-items:center">
+      <h2 style="font-size:26px">2 &middot; Games in the Arcade</h2>
+      <button class="btn btn-red" type="button" id="new-btn">+ Add a game</button>
+    </div>
+    <div style="overflow-x:auto"><table class="games"><thead><tr><th>Cover</th><th>Title</th><th>Studio</th><th>Type</th><th></th></tr></thead><tbody id="game-rows"></tbody></table></div>
+    <p class="small" id="site-link"></p>
+  </section>
+
+  <!-- ===================== 3. FORM ===================== -->
+  <section class="panel stack" id="form-panel" hidden>
+    <h2 style="font-size:26px" id="form-title">3 &middot; Add a game</h2>
+
+    <div class="form-grid">
+      <div class="field"><label for="f-title">Game title *</label><input id="f-title" required></div>
+      <div class="field"><label for="f-id">Page name (auto)</label><input id="f-id" pattern="[a-z0-9-]+"><span class="hint">Lowercase and dashes. Becomes game.html?id=…</span></div>
+      <div class="field"><label for="f-studio">Studio name *</label><input id="f-studio"></div>
+      <div class="field"><label for="f-team">Team (first name + last initial, with roles)</label><input id="f-team" placeholder="Maya R. (code), Eli T. (art)"></div>
+      <div class="field"><label for="f-genre">Genre *</label><input id="f-genre" list="genres" placeholder="Platformer"><datalist id="genres"></datalist></div>
+      <div class="field"><label for="f-engine">Engine *</label><input id="f-engine" list="engines" placeholder="Unity"><datalist id="engines"></datalist></div>
+      <div class="field"><label for="f-course">Course *</label><input id="f-course" list="courses"><datalist id="courses">
+        <option value="Computer Literacy"></option><option value="Game Design &amp; Development Principles"></option>
+        <option value="Introduction to Digital Game Graphics"></option><option value="Advanced 3D Game Development &amp; Publishing"></option></datalist></div>
+      <div class="field"><label for="f-year">School year</label><input id="f-year" placeholder="2026-27"></div>
+    </div>
+    <div class="form-grid">
+      <div class="field"><label for="f-pitch">Pitch (two sentences)</label><textarea id="f-pitch"></textarea></div>
+      <div class="field"><label for="f-controls">How to play</label><textarea id="f-controls"></textarea></div>
+      <div class="field"><label for="f-credits">Credits (team + any borrowed assets and licenses)</label><textarea id="f-credits"></textarea></div>
+    </div>
+
+    <div class="stack" style="gap:10px">
+      <strong style="color:var(--navy)">Where is the game? *</strong>
+      <div class="seg" role="radiogroup">
+        <label><input type="radio" name="ptype" value="local" checked> Build folder (Unity, Godot, GDevelop, Twine, HTML5)</label>
+        <label><input type="radio" name="ptype" value="codeorg"> Code.org (Game Lab / App Lab / Sprite Lab)</label>
+        <label><input type="radio" name="ptype" value="scratch"> Scratch</label>
+        <label><input type="radio" name="ptype" value="itch"> itch.io</label>
+      </div>
+      <div class="field" id="p-local">
+        <label for="f-folder">Choose the unzipped build folder (the one with index.html)</label>
+        <input id="f-folder" type="file" webkitdirectory directory multiple>
+        <span class="hint" id="folder-info">Unzip the student's build first. Unity: the folder that has index.html, Build and TemplateData.</span>
+      </div>
+      <div class="field" id="p-link" hidden>
+        <label for="f-link" id="link-label">Share link</label>
+        <input id="f-link" placeholder="https://studio.code.org/projects/gamelab/…">
+        <span class="hint" id="link-hint"></span>
+      </div>
+    </div>
+
+    <div class="form-grid" style="align-items:end">
+      <div class="field"><label for="f-aspect">Game window shape</label>
+        <select id="f-aspect"><option value="16/9">Wide 16:9 (most games)</option><option value="4/3">4:3</option><option value="1/1">Square (Code.org Game Lab)</option><option value="2/3">Phone (Code.org App Lab)</option></select></div>
+      <div class="field"><label for="f-devlog">Dev log link (optional)</label><input id="f-devlog" placeholder="https://docs.google.com/…"></div>
+      <div class="field"><label for="f-feedback">Feedback form link (optional)</label><input id="f-feedback" placeholder="https://forms.gle/…"></div>
+    </div>
+
+    <div style="display:flex;flex-wrap:wrap;gap:24px;align-items:flex-start">
+      <div class="field" style="flex:1 1 280px">
+        <label for="f-cover">Cover image (any size; the tool crops it to 630 &times; 500)</label>
+        <input id="f-cover" type="file" accept="image/*">
+        <span class="hint">Students can design it with the <a href="../assets/img/game-cover-template.png" download>cover template</a>. No image = placeholder art.</span>
+      </div>
+      <div class="cover-preview" id="cover-preview" aria-label="Cover preview" role="img"></div>
+    </div>
+
+    <label style="display:flex;gap:10px;align-items:center;font-weight:600;min-height:44px"><input type="checkbox" id="f-featured" style="width:20px;height:20px;accent-color:var(--red)"> Feature this game on the Home page (replaces the current featured game)</label>
+
+    <div id="form-msg"></div>
+    <div id="progress-box" hidden><progress id="progress" max="100" value="0"></progress><p class="small" id="progress-text"></p></div>
+    <div class="btns">
+      <button class="btn btn-red" type="button" id="publish-btn">Publish to the Arcade</button>
+      <button class="btn btn-line" type="button" id="cancel-btn">Cancel</button>
+    </div>
+  </section>
+
+  <!-- ===================== HELP ===================== -->
+  <section class="panel stack" id="token-help">
+    <h2 style="font-size:22px">How to get an access token (once a year)</h2>
+    <ol style="margin:0;padding-left:20px;display:flex;flex-direction:column;gap:6px">
+      <li>On github.com click your picture &rarr; <strong>Settings</strong> &rarr; <strong>Developer settings</strong> (bottom of the left menu) &rarr; <strong>Personal access tokens</strong> &rarr; <strong>Fine-grained tokens</strong> &rarr; <strong>Generate new token</strong>.</li>
+      <li>Name: <em>Code to Create publisher</em>. Expiration: up to a year.</li>
+      <li><strong>Repository access:</strong> Only select repositories &rarr; <strong>impactgamedesign</strong>.</li>
+      <li><strong>Permissions</strong> &rarr; Repository permissions &rarr; <strong>Contents: Read and write</strong>. Nothing else.</li>
+      <li>Click <strong>Generate token</strong>, copy it, and paste it in step 1 above.</li>
+    </ol>
+    <p class="small">Treat the token like a password: it can change this repository and nothing else. Don't share it or paste it into the website's files. If it ever leaks, delete it on that same GitHub page and make a new one.</p>
+    <h2 style="font-size:22px;margin-top:8px">Unity WebGL builds</h2>
+    <p class="small">Before building: Player Settings &rarr; Publishing Settings &rarr; <strong>Compression Format: Disabled</strong> (or Gzip with <strong>Decompression Fallback</strong> ticked). The publisher blocks Brotli builds because they won't load on GitHub Pages. Any single file must be under 100 MB.</p>
+  </section>
+</main>
+
+<script>
+(function () {
+  'use strict';
+  var $ = function (id) { return document.getElementById(id); };
+  var LS = 'c2c-publisher';
+  var cfg = {}, games = [], editing = null, coverBlob = null, folderFiles = [];
+
+  // ---------- settings ----------
+  try { var saved = JSON.parse(localStorage.getItem(LS) || '{}'); ['owner', 'repo', 'branch', 'token'].forEach(function (k) { if (saved[k]) $(k).value = saved[k]; }); } catch (e) {}
+  function readCfg() { cfg = { owner: $('owner').value.trim(), repo: $('repo').value.trim(), branch: $('branch').value.trim() || 'main', token: $('token').value.trim() }; return cfg; }
+  function saveCfg() { try { localStorage.setItem(LS, JSON.stringify(cfg)); } catch (e) {} }
+  $('forget-btn').onclick = function () { try { localStorage.removeItem(LS); } catch (e) {} $('token').value = ''; show('connect-msg', 'ok', 'Token removed from this computer.'); };
+
+  function show(id, kind, html) { $(id).innerHTML = html ? '<div class="msg ' + kind + '">' + html + '</div>' : ''; }
+  function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
+  function siteBase() { return 'https://' + cfg.owner.toLowerCase() + '.github.io/' + cfg.repo + '/'; }
+
+  // ---------- GitHub API ----------
+  function api(path, opts) {
+    opts = opts || {};
+    return fetch('https://api.github.com/repos/' + cfg.owner + '/' + cfg.repo + path, {
+      method: opts.method || 'GET',
+      headers: { 'Authorization': 'Bearer ' + cfg.token, 'Accept': 'application/vnd.github+json', 'X-GitHub-Api-Version': '2022-11-28', 'Content-Type': 'application/json' },
+      body: opts.body ? JSON.stringify(opts.body) : undefined
+    }).then(function (r) {
+      if (r.status === 404 && opts.allow404) return null;
+      if (!r.ok) return r.json().catch(function () { return {}; }).then(function (j) {
+        var m = j.message || ('HTTP ' + r.status);
+        if (r.status === 401) m = 'GitHub didn\'t accept the token. Check it was copied fully and hasn\'t expired.';
+        if (r.status === 403 || r.status === 404) m += ' — check the username, repository name, and that the token has Contents: Read and write on this repository.';
+        throw new Error(m);
+      });
+      return r.status === 204 ? null : r.json();
+    });
+  }
+  function b64ToText(b64) { var bin = atob(b64.replace(/\n/g, '')); var bytes = new Uint8Array(bin.length); for (var i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i); return new TextDecoder().decode(bytes); }
+  function bufToB64(buf) { var bytes = new Uint8Array(buf), out = '', CH = 0x8000; for (var i = 0; i < bytes.length; i += CH) out += String.fromCharCode.apply(null, bytes.subarray(i, i + CH)); return btoa(out); }
+  function textToB64(t) { return bufToB64(new TextEncoder().encode(t).buffer); }
+
+  // ---------- games.js read / write ----------
+  function parseGames(src) {
+    var fn = new Function('window', src + '\n;return window.GAMES;');
+    var list = fn({});
+    if (!Array.isArray(list)) throw new Error('games.js doesn\'t define window.GAMES as a list.');
+    return list;
+  }
+  var HEADER = '/* =====================================================================\n' +
+    '   THE GAME LIST — managed by the Game Publisher (tools/publisher.html).\n' +
+    '   You can still edit it by hand: one { ... } block per game, newest first.\n' +
+    '   play types: local (games/<id>/index.html), codeorg, scratch, itch.\n' +
+    '   ===================================================================== */\n';
+  function writeGames(list) {
+    var keys = ['id', 'title', 'studio', 'team', 'genre', 'engine', 'course', 'year', 'cover', 'pitch', 'controls', 'play', 'aspect', 'devlog', 'credits', 'feedback', 'featured'];
+    var blocks = list.map(function (g) {
+      var lines = keys.filter(function (k) { return g[k] !== undefined; }).map(function (k) { return '    ' + k + ': ' + JSON.stringify(g[k]); });
+      return '  {\n' + lines.join(',\n') + '\n  }';
+    });
+    return HEADER + 'window.GAMES = [\n\n' + blocks.join(',\n\n') + '\n\n];\n';
+  }
+
+  // ---------- connect ----------
+  $('connect-btn').onclick = function () {
+    readCfg();
+    if (!cfg.owner || !cfg.repo || !cfg.token) { show('connect-msg', 'err', 'Fill in username, repository and token.'); return; }
+    show('connect-msg', 'ok', 'Connecting…');
+    loadGames().then(function () {
+      saveCfg();
+      show('connect-msg', 'ok', 'Connected to <strong>' + esc(cfg.owner + '/' + cfg.repo) + '</strong>. ' + games.length + ' game(s) loaded.');
+      $('list-panel').hidden = false;
+      $('site-link').innerHTML = 'Live Arcade: <a href="' + siteBase() + 'arcade.html" target="_blank" rel="noopener">' + siteBase() + 'arcade.html</a> (changes appear about a minute after publishing).';
+    }).catch(function (e) { show('connect-msg', 'err', esc(e.message)); });
+  };
+  function loadGames() {
+    return api('/contents/assets/js/games.js?ref=' + encodeURIComponent(cfg.branch)).then(function (j) {
+      games = parseGames(b64ToText(j.content));
+      renderList();
+    });
+  }
+  function typeLabel(g) { var t = g.play && g.play.type; return { local: 'Build on site', codeorg: 'Code.org', scratch: 'Scratch', itch: 'itch.io' }[t] || '—'; }
+  function renderList() {
+    var rows = games.map(function (g, i) {
+      var cover = g.cover ? (/^https?:/.test(g.cover) ? g.cover : siteBase() + g.cover) : '../assets/img/game-placeholder.webp';
+      return '<tr><td><img src="' + esc(cover) + '" alt="" onerror="this.src=\'../assets/img/game-placeholder.webp\'"></td>' +
+        '<td><strong>' + esc(g.title) + '</strong>' + (g.featured ? ' <span class="pill">Featured</span>' : '') + '<br><span class="small">' + esc(g.genre) + ' · ' + esc(g.engine) + '</span></td>' +
+        '<td>' + esc(g.studio) + '</td><td>' + typeLabel(g) + '</td>' +
+        '<td><div class="row-actions">' +
+          '<button type="button" data-act="view" data-i="' + i + '">View</button>' +
+          '<button type="button" data-act="edit" data-i="' + i + '">Edit</button>' +
+          (g.featured ? '' : '<button type="button" data-act="feature" data-i="' + i + '">Feature</button>') +
+          '<button type="button" class="danger" data-act="remove" data-i="' + i + '">Remove</button>' +
+        '</div></td></tr>';
+    });
+    $('game-rows').innerHTML = rows.join('') || '<tr><td colspan="5" class="small">No games yet. Click “Add a game”.</td></tr>';
+    var dl = function (id, key) { var seen = {}; $(id).innerHTML = games.map(function (g) { return g[key]; }).filter(function (v) { if (!v || seen[v]) return false; seen[v] = 1; return true; }).map(function (v) { return '<option value="' + esc(v) + '"></option>'; }).join(''); };
+    dl('genres', 'genre'); dl('engines', 'engine');
+  }
+  $('game-rows').onclick = function (e) {
+    var b = e.target.closest('button'); if (!b) return;
+    var g = games[+b.dataset.i];
+    if (b.dataset.act === 'view') window.open(siteBase() + 'game.html?id=' + encodeURIComponent(g.id), '_blank');
+    if (b.dataset.act === 'edit') openForm(g);
+    if (b.dataset.act === 'feature') {
+      var list = games.map(function (x) { var y = Object.assign({}, x); y.featured = x.id === g.id; return y; });
+      commit([], list, [], 'Feature ' + g.title, 'connect-msg');
+    }
+    if (b.dataset.act === 'remove') {
+      if (!confirm('Remove “' + g.title + '” from the Arcade? Its files in games/' + g.id + '/ are deleted too.')) return;
+      commit([], games.filter(function (x) { return x.id !== g.id; }), ['games/' + g.id + '/'], 'Remove ' + g.title, 'connect-msg');
+    }
+  };
+
+  // ---------- form ----------
+  function slug(s) { return String(s).toLowerCase().normalize('NFKD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 48); }
+  $('f-title').addEventListener('input', function () { if (!editing && !$('f-id').dataset.touched) $('f-id').value = slug(this.value); });
+  $('f-id').addEventListener('input', function () { this.dataset.touched = '1'; });
+  $('new-btn').onclick = function () { openForm(null); };
+  $('cancel-btn').onclick = function () { $('form-panel').hidden = true; };
+
+  function setType(t) {
+    document.querySelectorAll('input[name=ptype]').forEach(function (r) { r.checked = r.value === t; });
+    $('p-local').hidden = t !== 'local'; $('p-link').hidden = t === 'local';
+    var info = {
+      codeorg: ['Code.org share link', 'In Code.org, the student clicks Share and copies the link. The site plays it with the code hidden. Sharing must be on for the student in your Code.org section.'],
+      scratch: ['Scratch project link', 'The project page link, e.g. https://scratch.mit.edu/projects/123456789/ — the project must be shared.'],
+      itch: ['itch.io embed link', 'On itch.io: Edit game → Distribute → Embed game, choose the option that embeds the game itself, and paste the code or the link (it contains embed-upload).']
+    }[t];
+    if (info) { $('link-label').textContent = info[0]; $('link-hint').textContent = info[1]; }
+    if (t === 'codeorg' && $('f-aspect').value === '16/9') $('f-aspect').value = '1/1';
+  }
+  document.querySelectorAll('input[name=ptype]').forEach(function (r) { r.onchange = function () { setType(this.value); }; });
+
+  function openForm(g) {
+    editing = g; coverBlob = null; folderFiles = [];
+    $('form-title').textContent = g ? '3 · Edit “' + g.title + '”' : '3 · Add a game';
+    var v = function (id, val) { $(id).value = val || ''; };
+    v('f-title', g && g.title); v('f-id', g && g.id); v('f-studio', g && g.studio); v('f-team', g && g.team);
+    v('f-genre', g && g.genre); v('f-engine', g && g.engine); v('f-course', g && g.course); v('f-year', g ? g.year : schoolYear());
+    v('f-pitch', g && g.pitch); v('f-controls', g && g.controls); v('f-credits', g && g.credits);
+    v('f-devlog', g && g.devlog); v('f-feedback', g && g.feedback);
+    $('f-aspect').value = (g && g.aspect) || '16/9';
+    $('f-featured').checked = !!(g && g.featured);
+    $('f-id').disabled = !!g; delete $('f-id').dataset.touched;
+    $('f-folder').value = ''; $('f-cover').value = '';
+    var t = (g && g.play && g.play.type) || 'local';
+    setType(t);
+    $('f-link').value = g && t !== 'local' ? g.play.src : '';
+    $('folder-info').textContent = g && t === 'local' ? 'Leave empty to keep the current build. Choose a folder only to replace it.' : 'Unzip the student\'s build first. Unity: the folder that has index.html, Build and TemplateData.';
+    var cv = g && g.cover ? (/^https?:/.test(g.cover) ? g.cover : siteBase() + g.cover) : '';
+    $('cover-preview').style.backgroundImage = cv ? 'url("' + cv + '")' : 'url("../assets/img/game-placeholder.webp")';
+    show('form-msg'); $('progress-box').hidden = true;
+    $('form-panel').hidden = false; $('form-panel').scrollIntoView({ behavior: 'smooth' });
+  }
+  function schoolYear() { var d = new Date(), y = d.getFullYear(); return d.getMonth() >= 6 ? y + '-' + String(y + 1).slice(2) : (y - 1) + '-' + String(y).slice(2); }
+
+  // ---------- build folder ----------
+  $('f-folder').onchange = function () {
+    var files = Array.prototype.slice.call(this.files);
+    folderFiles = []; show('form-msg');
+    if (!files.length) return;
+    var idx = files.filter(function (f) { return /(^|\/)index\.html?$/i.test(f.webkitRelativePath); })
+      .sort(function (a, b) { return a.webkitRelativePath.split('/').length - b.webkitRelativePath.split('/').length; })[0];
+    if (!idx) { show('form-msg', 'err', 'No index.html in that folder. Choose the folder that contains the game\'s index.html (for Unity, the WebGL build folder).'); return; }
+    var root = idx.webkitRelativePath.replace(/[^/]*$/, '');
+    var big = [], total = 0, warn = [];
+    files.forEach(function (f) {
+      var p = f.webkitRelativePath;
+      if (p.indexOf(root) !== 0) return;
+      var rel = p.slice(root.length);
+      if (/(^|\/)(\.DS_Store|Thumbs\.db|desktop\.ini)$/i.test(rel) || /(^|\/)\./.test(rel)) return;
+      if (f.size > 95 * 1024 * 1024) big.push(rel);
+      total += f.size;
+      folderFiles.push({ rel: rel, file: f });
+    });
+    if (big.length) { folderFiles = []; show('form-msg', 'err', 'These files are over GitHub\'s 100 MB limit: ' + esc(big.join(', ')) + '. Put this game on itch.io instead and choose “itch.io”.'); return; }
+    if (folderFiles.some(function (x) { return /\.br$/i.test(x.rel); })) { folderFiles = []; show('form-msg', 'err', 'This Unity build uses Brotli compression (.br files), which won\'t load on GitHub Pages. In Unity: Player Settings → Publishing Settings → Compression Format: Disabled, then build again.'); return; }
+    if (folderFiles.some(function (x) { return /\.gz$/i.test(x.rel); })) warn.push('This build has .gz files. Make sure “Decompression Fallback” was ticked in Unity, or rebuild with Compression Format: Disabled.');
+    if (total > 250 * 1024 * 1024) warn.push('This build is ' + Math.round(total / 1048576) + ' MB. That works, but uploads slowly and GitHub suggests keeping the whole site under 1 GB.');
+    var msg = '<strong>' + folderFiles.length + ' files</strong>, ' + (total / 1048576).toFixed(1) + ' MB, ready to upload.' + (warn.length ? '<br>' + warn.map(esc).join('<br>') : '');
+    show('form-msg', warn.length ? 'warn' : 'ok', msg);
+    if (!$('f-engine').value) {
+      if (folderFiles.some(function (x) { return /^Build\/.*\.(loader\.js|framework\.js)/i.test(x.rel); })) $('f-engine').value = 'Unity';
+      else if (folderFiles.some(function (x) { return /\.pck$/i.test(x.rel); })) $('f-engine').value = 'Godot';
+    }
+  };
+
+  // ---------- cover: crop to 630x500 WebP ----------
+  $('f-cover').onchange = function () {
+    var f = this.files[0]; coverBlob = null; if (!f) return;
+    var img = new Image();
+    img.onload = function () {
+      var W = 630, H = 500, c = document.createElement('canvas'); c.width = W; c.height = H;
+      var s = Math.max(W / img.width, H / img.height), w = img.width * s, h = img.height * s;
+      var ctx = c.getContext('2d'); ctx.fillStyle = '#0B1F3A'; ctx.fillRect(0, 0, W, H);
+      ctx.drawImage(img, (W - w) / 2, (H - h) / 2, w, h);
+      c.toBlob(function (b) { coverBlob = b; $('cover-preview').style.backgroundImage = 'url("' + URL.createObjectURL(b) + '")'; URL.revokeObjectURL(img.src); }, 'image/webp', 0.88);
+    };
+    img.onerror = function () { show('form-msg', 'err', 'That image couldn\'t be read. Try a PNG or JPG.'); };
+    img.src = URL.createObjectURL(f);
+  };
+
+  // ---------- link normalising ----------
+  function normLink(t, s) {
+    s = String(s || '').trim();
+    var m = s.match(/src=["']([^"']+)["']/); if (m) s = m[1];
+    if (t === 'codeorg') { m = s.match(/https:\/\/studio\.code\.org\/projects\/(gamelab|applab|spritelab)\/([A-Za-z0-9_\-]+)/i); return m ? 'https://studio.code.org/projects/' + m[1].toLowerCase() + '/' + m[2] : ''; }
+    if (t === 'scratch') { m = s.match(/scratch\.mit\.edu\/projects\/(\d+)/); return m ? 'https://scratch.mit.edu/projects/' + m[1] + '/embed' : ''; }
+    if (t === 'itch') { return /^https:\/\/(itch\.io|[a-z0-9-]+\.itch\.io|html-classic\.itch\.zone)\//i.test(s) ? s : ''; }
+    return '';
+  }
+
+  // ---------- publish ----------
+  $('publish-btn').onclick = function () {
+    var t = document.querySelector('input[name=ptype]:checked').value;
+    var g = {
+      id: (editing ? editing.id : slug($('f-id').value || $('f-title').value)),
+      title: $('f-title').value.trim(), studio: $('f-studio').value.trim(), team: $('f-team').value.trim(),
+      genre: $('f-genre').value.trim(), engine: $('f-engine').value.trim(), course: $('f-course').value.trim(), year: $('f-year').value.trim(),
+      cover: editing ? (editing.cover || '') : '', pitch: $('f-pitch').value.trim(), controls: $('f-controls').value.trim(),
+      play: null, aspect: $('f-aspect').value, devlog: $('f-devlog').value.trim(), credits: $('f-credits').value.trim(),
+      feedback: $('f-feedback').value.trim(), featured: $('f-featured').checked
+    };
+    var missing = ['title', 'studio', 'genre', 'engine', 'course'].filter(function (k) { return !g[k]; });
+    if (missing.length) { show('form-msg', 'err', 'Please fill in: ' + missing.join(', ') + '.'); return; }
+    if (!g.id) { show('form-msg', 'err', 'The page name can\'t be empty.'); return; }
+    if (!editing && games.some(function (x) { return x.id === g.id; })) { show('form-msg', 'err', 'A game with the page name “' + esc(g.id) + '” already exists. Change the page name.'); return; }
+
+    var files = [], deletes = [];
+    if (t === 'local') {
+      var keepOld = editing && editing.play && editing.play.type === 'local' && !folderFiles.length;
+      if (!folderFiles.length && !keepOld) { show('form-msg', 'err', 'Choose the game\'s build folder.'); return; }
+      g.play = { type: 'local', src: 'games/' + g.id + '/index.html' };
+      if (folderFiles.length) {
+        if (editing) deletes.push('games/' + g.id + '/');
+        folderFiles.forEach(function (x) { files.push({ path: 'games/' + g.id + '/' + x.rel, blob: x.file }); });
+      }
+    } else {
+      var src = normLink(t, $('f-link').value);
+      if (!src) { show('form-msg', 'err', 'That link doesn\'t look like a ' + { codeorg: 'Code.org project', scratch: 'Scratch project', itch: 'itch.io embed' }[t] + ' link.'); return; }
+      g.play = { type: t, src: src };
+      if (editing && editing.play && editing.play.type === 'local') deletes.push('games/' + g.id + '/');
+    }
+    if (coverBlob) {
+      var stamp = Date.now().toString(36);
+      g.cover = 'games/' + g.id + '/cover-' + stamp + '.webp';
+      files.push({ path: g.cover, blob: coverBlob });
+      if (editing && editing.cover && /^games\//.test(editing.cover) && !deletes.length) deletes.push(editing.cover);
+    } else if (deletes.length && g.cover && /^games\//.test(g.cover)) {
+      // keep the existing cover when the build folder is replaced
+      files.push({ path: g.cover, fromRepo: g.cover });
+    }
+
+    var list = games.map(function (x) { var y = Object.assign({}, x); if (g.featured) y.featured = false; return y; });
+    if (editing) list = list.map(function (x) { return x.id === g.id ? g : x; });
+    else list.unshift(g);
+    commit(files, list, deletes, (editing ? 'Update ' : 'Publish ') + g.title, 'form-msg', g);
+  };
+
+  function commit(files, list, deletes, message, msgId, game) {
+    var btns = document.querySelectorAll('button'); btns.forEach(function (b) { b.disabled = true; });
+    $('progress-box').hidden = msgId !== 'form-msg';
+    var steps = files.length + 4, done = 0;
+    function tick(text) { done++; $('progress').value = Math.round(done / steps * 100); $('progress-text').textContent = text; }
+    show(msgId, 'ok', 'Publishing… keep this tab open.');
+    var headSha, baseTree, entries = [];
+    api('/git/ref/heads/' + encodeURIComponent(cfg.branch)).then(function (ref) {
+      headSha = ref.object.sha; tick('Connected');
+      return api('/git/commits/' + headSha);
+    }).then(function (c) {
+      baseTree = c.tree.sha;
+      if (!deletes.length && !files.some(function (f) { return f.fromRepo; })) return null;
+      return api('/git/trees/' + baseTree + '?recursive=1');
+    }).then(function (tree) {
+      var existing = tree ? tree.tree.filter(function (e) { return e.type === 'blob'; }) : [];
+      var newPaths = {}; files.forEach(function (f) { newPaths[f.path] = 1; });
+      deletes.forEach(function (d) {
+        existing.forEach(function (e) {
+          var hit = d.slice(-1) === '/' ? e.path.indexOf(d) === 0 : e.path === d;
+          if (hit && !newPaths[e.path]) entries.push({ path: e.path, mode: '100644', type: 'blob', sha: null });
+        });
+      });
+      // files to keep from the repo (e.g. cover when the build is replaced) keep their blob sha
+      files = files.filter(function (f) {
+        if (!f.fromRepo) return true;
+        var e = existing.filter(function (x) { return x.path === f.fromRepo; })[0];
+        if (e) entries = entries.filter(function (x) { return x.path !== f.path; }), entries.push({ path: f.path, mode: '100644', type: 'blob', sha: e.sha });
+        done++; return false;
+      });
+      tick('Uploading files');
+      var queue = files.slice(), running = 0;
+      return new Promise(function (resolve, reject) {
+        if (!queue.length) return resolve();
+        function next() {
+          if (!queue.length && !running) return resolve();
+          while (running < 4 && queue.length) {
+            var f = queue.shift(); running++;
+            (function (f) {
+              f.blob.arrayBuffer().then(function (buf) {
+                return api('/git/blobs', { method: 'POST', body: { content: bufToB64(buf), encoding: 'base64' } });
+              }).then(function (b) {
+                entries.push({ path: f.path, mode: '100644', type: 'blob', sha: b.sha });
+                running--; tick('Uploaded ' + f.path); next();
+              }).catch(reject);
+            })(f);
+          }
+        }
+        next();
+      });
+    }).then(function () {
+      return api('/git/blobs', { method: 'POST', body: { content: textToB64(writeGames(list)), encoding: 'base64' } });
+    }).then(function (b) {
+      entries.push({ path: 'assets/js/games.js', mode: '100644', type: 'blob', sha: b.sha });
+      tick('Saving the game list');
+      return api('/git/trees', { method: 'POST', body: { base_tree: baseTree, tree: entries } });
+    }).then(function (t) {
+      return api('/git/commits', { method: 'POST', body: { message: message + ' (via Game Publisher)', tree: t.sha, parents: [headSha] } });
+    }).then(function (c) {
+      return api('/git/refs/heads/' + encodeURIComponent(cfg.branch), { method: 'PATCH', body: { sha: c.sha } });
+    }).then(function () {
+      $('progress').value = 100;
+      games = list; renderList();
+      var link = game ? siteBase() + 'game.html?id=' + encodeURIComponent(game.id) : siteBase() + 'arcade.html';
+      show(msgId, 'ok', '<strong>Done!</strong> ' + esc(message) + '. It goes live in about a minute: <a href="' + link + '" target="_blank" rel="noopener">' + esc(link) + '</a>');
+      if (msgId === 'form-msg') { editing = null; folderFiles = []; coverBlob = null; }
+    }).catch(function (e) {
+      show(msgId, 'err', 'Publishing stopped: ' + esc(e.message) + '<br>Nothing on the site changed. Fix the problem and click Publish again.');
+    }).then(function () { btns.forEach(function (b) { b.disabled = false; }); });
+  }
+})();
+</script>
+</body>
+</html>

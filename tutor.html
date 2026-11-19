@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AI Tutor Assistant — Code to Create</title>
+  <meta name="description" content="AI tutors for Blender, Code.org Game Lab, App Lab and Unity/C#, built to coach students instead of doing the work.">
+  <meta property="og:title" content="AI Tutor Assistant — Code to Create">
+  <meta property="og:description" content="AI tutors for Blender, Code.org Game Lab, App Lab and Unity/C#, built to coach students instead of doing the work.">
+  <meta name="theme-color" content="#0B1F3A">
+  <link rel="icon" type="image/png" href="assets/img/favicon-64.png">
+  <link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/site.css">
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+  <header class="site-header">
+    <div class="bar">
+      <a class="brand" href="index.html"><img src="assets/img/logo-code-to-create.png" alt="Code to Create — Game Design at IMPACT" width="600" height="160"></a>
+      <button class="menu-btn" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="Menu">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+      </button>
+      <nav class="nav" id="site-nav" aria-label="Main">
+        <a href="index.html">Home</a>
+        <a href="pathway.html">The Pathway</a>
+        <a href="arcade.html">Student Arcade</a>
+        <a href="jams.html">Game Jams</a>
+        <a href="tutor.html" aria-current="page">AI Tutor Assistant</a>
+        <a href="about.html">About</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="dark">
+      <div class="wrap stack" style="padding-top:64px;padding-bottom:68px">
+        <span class="eyebrow">#CodeToCreate &middot; AI Tutor Assistant</span>
+        <h1>Stuck? Ask your tutor.</h1>
+        <p class="lead">Each tutor knows one of our tools and coaches you toward the answer &mdash; it asks questions, gives hints and explains why, instead of doing the work for you.</p>
+      </div>
+    </section>
+
+    <section>
+      <div class="wrap tight">
+        <div class="panel" style="border-left:0;border-top:6px solid var(--red)">
+          <h2 style="font-size:22px;margin-bottom:12px">Before you ask</h2>
+          <ul class="checklist" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px 28px">
+            <li>Sign in with your school Google account.</li>
+            <li>Paste the exact error message and your code &mdash; it's the fastest way to get help.</li>
+            <li>AI can be wrong. Test what it says before you trust it.</li>
+            <li>Never share personal info: full name, address, phone, passwords.</li>
+            <li>Credit AI help in your game's credits or dev log.</li>
+            <li>Follow the class AI policy for graded work. [Link or short version of your policy]</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="gray">
+      <div class="wrap stack" style="gap:28px">
+        <h2>Pick your tutor</h2>
+        <div class="grid" id="tutors" style="grid-template-columns:repeat(auto-fit,minmax(min(100%,440px),1fr))"></div>
+        <p class="small" id="copy-status" aria-live="polite"></p>
+      </div>
+    </section>
+
+    <section>
+      <div class="wrap stack" style="gap:16px">
+        <h2>How to ask a good question</h2>
+        <div class="grid four">
+          <div class="step"><span class="num">1</span><h3>Goal</h3><p>&ldquo;I want my player to jump when I press Space.&rdquo;</p></div>
+          <div class="step"><span class="num">2</span><h3>Problem</h3><p>&ldquo;Instead, nothing happens and there's no error.&rdquo;</p></div>
+          <div class="step"><span class="num">3</span><h3>Evidence</h3><p>Paste the code, the error, or describe what's on screen.</p></div>
+          <div class="step"><span class="num">4</span><h3>Tried</h3><p>&ldquo;I already checked the key name and added a Rigidbody.&rdquo;</p></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <div class="stack" style="gap:6px">
+        <img src="assets/img/logo-code-to-create.png" alt="" width="600" height="160">
+        <span>Game Design Pathway &middot; IMPACT Center for Leadership &amp; Innovation</span>
+        <span>Warren County Public Schools</span>
+      </div>
+      <div class="stack" style="gap:4px">
+        <strong>[Teacher name], Game Design Instructor</strong>
+        <span>[Room / lab number]</span>
+        <a href="mailto:[school email]">[school email]</a>
+      </div>
+      <div class="stack" style="gap:4px">
+        <a href="https://impactcenter.warrencountyschools.org/">IMPACT Center website</a>
+        <span>&copy; <span id="year">2026</span> Code to Create</span>
+      </div>
+    </div>
+  </footer>
+  <script src="assets/js/games.js"></script>
+  <script src="assets/js/site.js"></script>
+  <script src="assets/js/tutors.js"></script>
+  <script>
+    (function () {
+      var e = C2C.esc;
+      var icons = {
+        blender: '<path d="M12 3l8 4.5v9L12 21l-8-4.5v-9z"/><path d="M12 12l8-4.5M12 12v9M12 12L4 7.5"/>',
+        gamelab: '<rect x="2" y="7" width="20" height="11" rx="5"/><path d="M7 11v3M5.5 12.5h3"/><circle cx="16" cy="11.5" r=".8"/><circle cx="18" cy="13.5" r=".8"/>',
+        applab: '<rect x="6" y="2" width="12" height="20" rx="2.5"/><path d="M10.5 18.5h3"/><path d="M9 7h6M9 10.5h6M9 14h3"/>',
+        unity: '<path d="M8 7l-5 5 5 5"/><path d="M16 7l5 5-5 5"/><path d="M13.5 4l-3 16"/>'
+      };
+      var status = document.getElementById('copy-status');
+      function copy(text, label) {
+        var done = function () { status.textContent = label + ' copied. Paste it into the chat.'; };
+        if (navigator.clipboard && window.isSecureContext) { navigator.clipboard.writeText(text).then(done, function () { fallback(text); done(); }); }
+        else { fallback(text); done(); }
+      }
+      function fallback(text) {
+        var t = document.createElement('textarea'); t.value = text; t.setAttribute('readonly', ''); t.style.position = 'absolute'; t.style.left = '-9999px';
+        document.body.appendChild(t); t.select(); try { document.execCommand('copy'); } catch (err) {} document.body.removeChild(t);
+      }
+      var box = document.getElementById('tutors');
+      (window.TUTORS || []).forEach(function (t) {
+        var card = document.createElement('article');
+        card.className = 'card';
+        var linkOk = /^https:\/\//.test(t.link || '');
+        card.innerHTML =
+          '<div style="background:var(--navy);padding:22px 22px 18px;display:flex;gap:14px;align-items:center;border-bottom:4px solid var(--red)">' +
+            '<svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + (icons[t.id] || icons.unity) + '</svg>' +
+            '<div><h3 style="color:#fff">' + e(t.name) + '</h3><span style="color:var(--red-light);font-size:13px;font-weight:700;letter-spacing:.08em;text-transform:uppercase">' + e(t.tool) + '</span></div></div>' +
+          '<div class="body" style="gap:14px">' +
+            '<p>' + e(t.blurb) + '</p>' +
+            '<div class="btns" data-actions></div>' +
+            '<div><p class="small" style="font-weight:700;color:var(--navy);margin-bottom:6px">Try asking (click to copy):</p><div class="stack" style="gap:6px" data-starters></div></div>' +
+            '<p class="small" style="margin-top:auto">' + t.resources.map(function (r) { return '<a href="' + e(r[1]) + '" target="_blank" rel="noopener">' + e(r[0]) + '</a>'; }).join(' &middot; ') + '</p>' +
+          '</div>';
+        var actions = card.querySelector('[data-actions]');
+        if (linkOk) {
+          var a = document.createElement('a'); a.className = 'btn btn-red'; a.href = t.link; a.target = '_blank'; a.rel = 'noopener';
+          a.textContent = 'Open ' + t.name; actions.appendChild(a);
+        }
+        var b = document.createElement('button'); b.type = 'button';
+        b.className = linkOk ? 'btn btn-line' : 'btn btn-red';
+        b.textContent = linkOk ? 'Copy tutor setup' : 'Copy tutor setup';
+        b.title = 'Copies the tutor instructions. Paste them as your first message in an approved AI chat.';
+        b.addEventListener('click', function () { copy(t.instructions, t.name + ' setup'); });
+        actions.appendChild(b);
+        if (!linkOk) {
+          var g = document.createElement('a'); g.className = 'btn btn-line'; g.href = 'https://gemini.google.com/'; g.target = '_blank'; g.rel = 'noopener';
+          g.textContent = 'Open Gemini'; actions.appendChild(g);
+        }
+        var st = card.querySelector('[data-starters]');
+        t.starters.forEach(function (q) {
+          var s = document.createElement('button'); s.type = 'button';
+          s.style.cssText = 'text-align:left;cursor:pointer;font:14px var(--font-body);color:var(--ink);background:var(--gray);border:1px solid var(--line);border-radius:8px;padding:10px 12px;min-height:44px';
+          s.textContent = '\u201c' + q + '\u201d';
+          s.addEventListener('click', function () { copy(q, 'Question'); });
+          st.appendChild(s);
+        });
+        box.appendChild(card);
+      });
+    })();
+  </script>
+</body>
+</html>

@@ -28,7 +28,8 @@ The teacher website for the Game Design pathway at the IMPACT Center for Leaders
 | `pathway.html` | The Pathway: courses, skills, careers, family FAQ |
 | `arcade.html` | Student Arcade: every game, with filters and search |
 | `game.html` | One page that shows any game (`game.html?id=...`) |
-| `publish.html` | Publish Your Game: checklist and submission |
+| `tutor.html` | AI Tutor Assistant |
+| `tools/publisher.html` | **Game Publisher** (teacher only, not in the menu) |
 | `jams.html` | Game Jams |
 | `about.html` | About you and the program |
 | `assets/js/games.js` | **The game list.** The only file you edit to add a game. |
@@ -37,27 +38,34 @@ The teacher website for the Game Design pathway at the IMPACT Center for Leaders
 
 To edit any page on GitHub, open the file, click the **pencil** icon, make the change, and click **Commit changes**. The live site updates in about a minute.
 
-**First edits:** search each page for `[` to find the placeholders: `[Teacher name]`, `[DATE]`, `[Course 1 name]` and so on. In `publish.html`, replace `FORM-ID` with your Google Form link.
+**First edits:** search each page for `[` to find the placeholders: `[Teacher name]`, `[DATE]` and so on.
 
 ---
 
-## Add a student game
+## Add a student game: use the Game Publisher
 
-1. **Get the build.** The student exports a web build (Unity WebGL, Godot HTML5, GDevelop HTML5, or Twine HTML) and zips the folder. `index.html` must be at the top of the zip.
-2. **Upload it.** On your computer, unzip the build into a folder named after the game, such as `sky-runner`, and put the 630 × 500 cover in it as `cover.png`. In the repo, open `games/` → **Add file → Upload files**, then drag the whole `sky-runner` folder onto the page. GitHub keeps the folder structure. Click **Commit changes**.
-3. **List it.** Open `assets/js/games.js`, copy the template block at the bottom, paste it at the top of the list, and fill it in. Set `play` to `{ type: "local", src: "games/sky-runner/index.html" }`.
-4. **Commit.** The game appears in the Arcade, with its own page, in about a minute.
+Students don't submit games. You publish them with the **Game Publisher**, a page only you use. It's not linked anywhere on the site.
 
-**Scratch games** don't need a folder. Use `play: { type: "scratch", src: "https://scratch.mit.edu/projects/123456789/embed" }`.
-**Code.org Game Lab, App Lab or Sprite Lab games** don't need a folder either. The student clicks **Share** in Code.org and copies the link. Use `play: { type: "codeorg", src: "https://studio.code.org/projects/gamelab/XXXXXXX" }` with `aspect: "1/1"` for Game Lab (App Lab: `"2/3"`). The site plays it with the code hidden and adds an **Open on Code.org** button. If a student's Share button won't give a link, sharing is turned off for their account: check the Sharing column in your Code.org section's roster.
+**Open it:** `https://executivetick.github.io/impactgamedesign/tools/publisher.html`. Bookmark it. It also works if you open `tools/publisher.html` from the downloaded zip on your computer.
 
-**Games already on itch.io:** use `play: { type: "itch", src: "https://itch.io/embed-upload/XXXXXXX" }`, copied from the game's itch.io **Distribute → Embed game** page.
+**One-time setup on each computer:** connect it to GitHub with an access token. The steps are at the bottom of the publisher page. The token is saved only in that browser; it's never on the website.
 
-To feature a game on the Home page, set `featured: true` on that game and `false` on the others.
+**To publish a game:**
+1. Click **Connect & load games**, then **+ Add a game**.
+2. Fill in the title, studio, genre, engine and course.
+3. Choose where the game is:
+   - **Build folder** (Unity, Godot, GDevelop, Twine, HTML5): unzip the student's build and choose the folder that has `index.html`.
+   - **Code.org** (Game Lab, App Lab, Sprite Lab), **Scratch** or **itch.io**: paste the share link.
+4. Choose a cover image. Any size works; the publisher crops it to 630 × 500.
+5. Click **Publish to the Arcade**. The game is live in about a minute.
+
+The list in the publisher also lets you **Edit**, **Feature** (on the Home page) or **Remove** a game. Each action is one commit, so it can be undone from the repo's history.
+
+**By hand (backup):** put the build in `games/<id>/` and add a block to `assets/js/games.js`, following the blocks already there.
 
 ### Unity WebGL builds
 
-GitHub Pages can't serve Unity's compressed files the way Unity expects. Before building, go to **Player Settings → Publishing Settings** and either:
+GitHub Pages can't serve Unity's compressed files the way Unity expects. Before building, go to **Player Settings → Publishing Settings** and either set one of these (the publisher blocks Brotli builds and warns about Gzip):
 - set **Compression Format: Disabled**, or
 - keep Gzip and tick **Decompression Fallback**.
 
@@ -69,14 +77,14 @@ GitHub limits single files to 100 MB, and the whole site should stay under 1 GB.
 
 - [ ] Students are listed by first name and last initial only
 - [ ] No student photos without a media release on file
-- [ ] Every game passed the launch checklist on the Publish page
-- [ ] Only you (and co-teachers) have write access to this repo. Students submit through the form.
+- [ ] Every game was checked by you before publishing
+- [ ] Only you (and co-teachers) have write access to this repo and a publisher token
 
 ---
 
 ## The sample game
 
-`games/sample-dodge/` is a tiny sample game, so the Arcade and Home page work from day one. When real games are in, delete that folder and its block in `games.js`.
+`games/sample-dodge/` is a tiny sample game, so the Arcade and Home page work from day one. When real games are in, click **Remove** next to it in the Game Publisher.
 
 ## Preview on your own computer
 
