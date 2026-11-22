@@ -35,7 +35,6 @@ The teacher website for the Game Design pathway at the IMPACT Center for Leaders
 | `assets/js/games.js` | **The game list.** The only file you edit to add a game. |
 | `assets/css/site.css` | Colors and fonts, all at the top of the file |
 | `games/gamelab/`, `games/unity/`, `games/html5/` | **Drop-in game folders.** Each one appears in the Arcade automatically. |
-| `gamelab/` | The GameLabJS runtime and player for Game Lab games |
 | `scripts/build-arcade.mjs` + `.github/workflows/deploy.yml` | Build the Arcade list and publish the site on every upload |
 
 To edit any page on GitHub, open the file, click the **pencil** icon, make the change, and click **Commit changes**. The live site updates in about a minute.
@@ -48,9 +47,9 @@ To edit any page on GitHub, open the file, click the **pencil** icon, make the c
 
 | Game made in | Upload the game folder to | Must contain |
 | --- | --- | --- |
-| Code.org Game Lab (GameLabJS) | `games/gamelab/` | `game.js` (+ an `assets/` folder for images) |
+| Code.org Game Lab, App Lab, Sprite Lab (Code.org's embed) | `games/gamelab/` | `link.txt` with the project's share link |
 | Unity (WebGL build) | `games/unity/` | `index.html` |
-| Godot, GDevelop, Twine, other HTML5 | `games/html5/` | `index.html` |
+| Godot, GDevelop, Twine, other HTML5, or a Game Lab game converted with GameLabJS | `games/html5/` | `index.html` (use `_GameLabTemplate` for Game Lab conversions) |
 
 1. Open the upload page for that folder, for example
    `https://github.com/executivetick/impactgamedesign/upload/main/games/gamelab`
@@ -61,9 +60,9 @@ Each game folder can also have a **`cover.png`** (the Arcade card picture) and a
 
 **To remove a game:** delete its folder on GitHub, or add `"hidden": true` to its `info.json`.
 
-**If a game doesn't show up:** open the repo's **Actions** tab and click the latest run. Its "Build the Arcade game list" step lists every game it found and explains anything it skipped (a missing `game.js`, a folder name with spaces, a Brotli Unity build).
+**If a game doesn't show up:** open the repo's **Actions** tab and click the latest run. Its "Build the Arcade game list" step lists every game it found and explains anything it skipped (a missing `link.txt` or `index.html`, a Brotli Unity build).
 
-**Code.org share links, Scratch and itch.io games** don't have folders. Add those with the Game Publisher, below.
+**Scratch and itch.io games** don't have folders. Add those with the Game Publisher, below. It can add Code.org links too, if you'd rather not make a folder.
 
 ## The Game Publisher (for share links)
 

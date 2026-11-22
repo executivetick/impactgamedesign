@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Game Lab game</title>
+<style>
+  html, body { margin: 0; height: 100%; background: #0B1F3A; overflow: hidden; font-family: system-ui, sans-serif; }
+  body { display: flex; align-items: center; justify-content: center; }
+  #game { display: block; width: min(100vw, 100vh); height: min(100vw, 100vh); background: #000; outline: none; }
+  #start { position: fixed; inset: 0; display: flex; flex-direction: column; gap: 10px; align-items: center; justify-content: center;
+           background: rgba(11, 31, 58, .82); color: #fff; border: 0; cursor: pointer; font: 800 26px system-ui, sans-serif; width: 100%; }
+  #start[hidden] { display: none; }
+  #start span { font: 600 15px system-ui, sans-serif; color: #DCE4EF; }
+  #start::before { content: ""; border-left: 34px solid #C8102E; border-top: 22px solid transparent; border-bottom: 22px solid transparent; margin-bottom: 6px; }
+</style>
+</head>
+<body>
+  <!-- A Game Lab game converted to run without Code.org, using the GameLabJS runtime.
+       To make one: copy this whole folder, rename it (e.g. games/html5/SpaceShooter),
+       replace game.js with the student's Game Lab code, and put its images in assets/. -->
+  <canvas id="game" width="400" height="400" tabindex="0" aria-label="Game"></canvas>
+  <button id="start" type="button">Click to play<span>Then use your keyboard and mouse</span></button>
+  <script src="gamelab.js"></script>
+  <script>
+    GameLabJS.reset();
+    GameLabJS.configure({ canvas: document.getElementById('game'), gameRoot: '' });
+  </script>
+  <script src="game.js"></script>
+  <script>
+    document.getElementById('start').addEventListener('click', function () {
+      this.hidden = true;
+      document.getElementById('game').focus();
+      GameLabJS.run();
+    });
+  </script>
+</body>
+</html>
