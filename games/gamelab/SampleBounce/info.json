@@ -1,8 +1,0 @@
-{
-  "title": "Sample Bounce",
-  "creator": "Code to Create (sample)",
-  "genre": "Arcade",
-  "course": "Computer Literacy",
-  "pitch": "A tiny paddle game that shows how Game Lab games drop into the Arcade. Delete this folder when real games are in.",
-  "controls": "Left and Right arrow keys move the paddle. Space restarts."
-}
