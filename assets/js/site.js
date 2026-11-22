@@ -45,11 +45,11 @@ var C2C = {
   // or the whole <iframe> code, and turns it into a play-only embed link.
   codeorgEmbed: function (s) {
     var m = String(s).match(/https:\/\/studio\.code\.org\/projects\/(gamelab|applab|spritelab)\/([A-Za-z0-9_\-]+)/i);
-    return m ? 'https://studio.code.org/projects/' + m[1].toLowerCase() + '/' + m[2] + '/embed?nosource' : '';
+    return m ? 'https://studio.code.org/projects/' + m[1].toLowerCase() + '/' + m[2] + '/embed' : '';
   },
   codeorgShare: function (s) {
     var m = String(s).match(/https:\/\/studio\.code\.org\/projects\/(gamelab|applab|spritelab)\/([A-Za-z0-9_\-]+)/i);
-    return m ? 'https://studio.code.org/projects/' + m[1].toLowerCase() + '/' + m[2] + '/?nosource' : '';
+    return m ? 'https://studio.code.org/projects/' + m[1].toLowerCase() + '/' + m[2] + '' : '';
   },
   card: function (g) {
     var e = C2C.esc;
