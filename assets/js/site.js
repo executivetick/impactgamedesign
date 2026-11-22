@@ -47,6 +47,19 @@ var C2C = {
     var m = String(s).match(/https:\/\/studio\.code\.org\/projects\/(gamelab|applab|spritelab)\/([A-Za-z0-9_\-]+)/i);
     return m ? 'https://studio.code.org/projects/' + m[1].toLowerCase() + '/' + m[2] + '/embed' : '';
   },
+  // Code.org's embed is a fixed-size player (about 400 x 600 for Game Lab / Sprite Lab,
+  // a phone for App Lab). Size the frame to it exactly and center it.
+  fitCodeorg: function (box, g) {
+    if (!g.play || g.play.type !== 'codeorg') return;
+    var lab = (String(g.play.src).match(/projects\/(gamelab|applab|spritelab)\//i) || [])[1] || 'gamelab';
+    var size = lab.toLowerCase() === 'applab' ? [322, 562] : [402, 602];
+    box.style.aspectRatio = size[0] + ' / ' + size[1];
+    box.style.width = size[0] + 'px';
+    box.style.maxWidth = '100%';
+    box.style.marginInline = 'auto';
+    box.style.background = 'transparent';
+    box.style.borderRadius = '10px';
+  },
   codeorgShare: function (s) {
     var m = String(s).match(/https:\/\/studio\.code\.org\/projects\/(gamelab|applab|spritelab)\/([A-Za-z0-9_\-]+)/i);
     return m ? 'https://studio.code.org/projects/' + m[1].toLowerCase() + '/' + m[2] + '' : '';

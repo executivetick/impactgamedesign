@@ -93,12 +93,13 @@
       function set(i, t) { document.getElementById(i).textContent = t || ''; }
       if (!g) { set('g-title', 'Game not found'); set('g-studio', 'It may have moved. Head back to the Arcade.'); document.getElementById('g-player').hidden = true; return; }
       document.title = g.title + ' — Code to Create Arcade';
-      set('g-title', g.title); set('g-studio', 'by ' + g.studio); set('g-eyebrow', 'Student Arcade' + (g.year ? ' · ' + g.year : ''));
+      set('g-title', g.title); set('g-studio', g.studio ? 'by ' + g.studio : ''); set('g-eyebrow', 'Student Arcade' + (g.year ? ' · ' + g.year : ''));
       set('g-pitch', g.pitch); set('g-controls', g.controls); set('g-tags', [g.genre, g.engine, g.course].filter(Boolean).join(' · '));
       set('g-studio2', g.studio); set('g-team', g.team); set('g-credits', g.credits);
       var p = document.getElementById('g-player'); var asp = g.aspect || '16/9'; p.style.aspectRatio = asp;
       var parts = asp.split('/'); var ratio = parts[0] / (parts[1] || 1);
       if (ratio < 1.3) { p.style.maxWidth = Math.round(620 * ratio) + 'px'; p.style.marginInline = 'auto'; }
+      C2C.fitCodeorg(p, g);
       if (g.play && g.play.type === 'codeorg') { var u = C2C.codeorgShare(g.play.src); if (u) { var co = document.getElementById('g-codeorg'); co.href = u; co.hidden = false; } }
       var src = C2C.safeSrc(g.play);
       if (src) {
