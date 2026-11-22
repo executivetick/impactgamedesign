@@ -51,7 +51,9 @@ var C2C = {
   // box, empty control panel or footer), scaled up to fit, with our own title cover on top.
   // The cover lets clicks pass through, so the player's one click starts the game.
   // App Lab apps keep Code.org's full phone-shaped player.
-  CODEORG: { game: 400, border: 1, frameW: 402, frameH: 602, maxW: 560 },
+  // Where the game square sits inside Code.org's player (in Code.org's pixels).
+  // If the game looks shifted, adjust offsetX (left/right) or offsetY (up/down).
+  CODEORG: { game: 400, offsetX: 21, offsetY: 1, frameW: 460, frameH: 640, maxW: 560 },
   fitCodeorg: function (box, g) {
     if (!g.play || g.play.type !== 'codeorg') return;
     var lab = ((String(g.play.src).match(/projects\/(gamelab|applab|spritelab)\//i) || [])[1] || 'gamelab').toLowerCase();
@@ -75,7 +77,7 @@ var C2C = {
     frame.style.transformOrigin = '0 0';
     function scale() {
       var s = box.clientWidth / C.game;
-      frame.style.transform = 'scale(' + s + ') translate(' + (-C.border) + 'px,' + (-C.border) + 'px)';
+      frame.style.transform = 'scale(' + s + ') translate(' + (-C.offsetX) + 'px,' + (-C.offsetY) + 'px)';
     }
     scale();
     window.addEventListener('resize', scale);
