@@ -43,7 +43,7 @@ window.GAMES = [
     devlog: "",
     credits: "Made for the Code to Create site template. No outside assets.",
     feedback: "",
-    featured: true
+    featured: false
   }
 
   /* ---- TEMPLATE: copy from here ----
