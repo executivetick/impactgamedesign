@@ -148,6 +148,7 @@
       var hp = (g.aspect || '16/9').split('/'); if (hp[0] / (hp[1] || 1) < 1.3) { p.style.maxWidth = Math.round(480 * hp[0] / (hp[1] || 1)) + 'px'; }
       C2C.fitCodeorg(p, g);
       p.innerHTML = '<iframe src="' + e(src) + '" title="' + e(g.title) + '" loading="lazy" allow="fullscreen; autoplay; gamepad" allowfullscreen></iframe>';
+      C2C.gameMode(p.querySelector('iframe'), null);
       document.getElementById('featured-title').textContent = g.title;
       document.getElementById('featured-studio').textContent = g.studio ? 'by ' + g.studio : '';
       document.getElementById('featured-pitch').textContent = g.pitch;

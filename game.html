@@ -47,7 +47,8 @@
       <div class="wrap stack" style="gap:24px;padding-top:40px">
         <div class="player" id="g-player"></div>
         <div class="btns" style="justify-content:space-between;align-items:center">
-          <p class="small">Click inside the game first, then use your keyboard.</p>
+          <p class="small" id="g-hint">Click inside the game first, then use your keyboard.</p>
+          <p class="small" id="g-mode" hidden style="color:var(--red-dark);font-weight:700">Playing: page scrolling is paused. Click outside the game to scroll.</p>
           <div class="btns">
             <button class="btn btn-line" type="button" id="g-full">Full screen</button>
             <a class="btn btn-line" id="g-codeorg" href="#" target="_blank" rel="noopener" hidden>Open on Code.org</a>
@@ -106,6 +107,7 @@
         var f = document.createElement('iframe');
         f.src = src; f.title = g.title; f.setAttribute('allow', 'fullscreen; autoplay; gamepad'); f.allowFullscreen = true;
         p.appendChild(f);
+        C2C.gameMode(f, document.getElementById('g-mode'));
         document.getElementById('g-full').addEventListener('click', function () { (f.requestFullscreen || f.webkitRequestFullscreen || function(){}).call(f); });
       } else {
         p.innerHTML = '<div class="ph" style="height:100%;border-radius:0">This game\'s play link is missing or not allowed. Check its "play" entry in games.js.</div>';

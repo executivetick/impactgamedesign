@@ -60,6 +60,32 @@ var C2C = {
     box.style.background = 'transparent';
     box.style.borderRadius = '10px';
   },
+  // Game mode: while a game frame has keyboard focus, freeze page scrolling so the
+  // arrow keys and Space move the game instead of the page. Clicking outside the game ends it.
+  gameMode: function (frame, note) {
+    var root = document.documentElement, on = false;
+    function lock() {
+      if (on) return; on = true;
+      var r = frame.getBoundingClientRect();
+      if (r.top < 70 || r.bottom > window.innerHeight) frame.scrollIntoView({ block: 'center', behavior: 'smooth' });
+      var bar = window.innerWidth - root.clientWidth;
+      setTimeout(function () {
+        if (!on) return;
+        root.style.overflow = 'hidden';
+        if (bar > 0) document.body.style.paddingRight = bar + 'px';
+      }, 350);
+      if (note) note.hidden = false;
+    }
+    function unlock() {
+      if (!on) return; on = false;
+      root.style.overflow = ''; document.body.style.paddingRight = '';
+      if (note) note.hidden = true;
+    }
+    window.addEventListener('blur', function () { setTimeout(function () { if (document.activeElement === frame) lock(); }, 0); });
+    window.addEventListener('focus', unlock);
+    document.addEventListener('mousedown', unlock);
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape') unlock(); });
+  },
   codeorgShare: function (s) {
     var m = String(s).match(/https:\/\/studio\.code\.org\/projects\/(gamelab|applab|spritelab)\/([A-Za-z0-9_\-]+)/i);
     return m ? 'https://studio.code.org/projects/' + m[1].toLowerCase() + '/' + m[2] + '' : '';
