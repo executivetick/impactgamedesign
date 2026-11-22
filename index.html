@@ -134,6 +134,7 @@
     </div>
   </footer>
   <script src="assets/js/games.js"></script>
+  <script src="assets/js/games-auto.js"></script>
   <script src="assets/js/site.js"></script>
   <script>
     (function () {
@@ -149,7 +150,7 @@
       document.getElementById('featured-title').textContent = g.title;
       document.getElementById('featured-studio').textContent = 'by ' + g.studio;
       document.getElementById('featured-pitch').textContent = g.pitch;
-      document.getElementById('featured-chips').innerHTML = [g.genre, g.engine, g.course].map(function (t) { return '<span class="chip">' + e(t) + '</span>'; }).join('');
+      document.getElementById('featured-chips').innerHTML = [g.genre, g.engine, g.course].filter(Boolean).map(function (t) { return '<span class="chip">' + e(t) + '</span>'; }).join('');
       document.getElementById('featured-link').href = 'game.html?id=' + encodeURIComponent(g.id);
     })();
   </script>

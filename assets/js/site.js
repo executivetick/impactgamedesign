@@ -15,7 +15,15 @@
 })();
 
 var C2C = {
-  games: function () { return (window.GAMES || []).filter(function (g) { return g && g.id; }); },
+  // Games listed by hand / the Game Publisher (games.js) come first, then games found
+  // automatically in games/gamelab, games/unity and games/html5 (games-auto.js).
+  games: function () {
+    var seen = {}, out = [];
+    (window.GAMES || []).concat(window.AUTO_GAMES || []).forEach(function (g) {
+      if (g && g.id && !seen[g.id]) { seen[g.id] = 1; out.push(g); }
+    });
+    return out;
+  },
   esc: function (s) {
     return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
       return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
@@ -26,7 +34,8 @@ var C2C = {
   safeSrc: function (play) {
     if (!play || !play.src) return '';
     var s = String(play.src);
-    if (play.type === 'local' && /^games\/[a-z0-9\-_/.]+$/i.test(s) && s.indexOf('..') < 0) return s;
+    if (play.type === 'local' && /^games\/[a-z0-9\-_/.%]+$/i.test(s) && s.indexOf('..') < 0) return s;
+    if (play.type === 'gamelab' && /^[A-Za-z0-9_\-]+$/.test(s)) return 'gamelab/play.html?game=' + encodeURIComponent(s);
     if (play.type === 'itch' && /^https:\/\/(itch\.io|[a-z0-9-]+\.itch\.io|html-classic\.itch\.zone)\//i.test(s)) return s;
     if (play.type === 'scratch' && /^https:\/\/scratch\.mit\.edu\/projects\/\d+\/embed/i.test(s)) return s;
     if (play.type === 'codeorg') return C2C.codeorgEmbed(s);
@@ -48,7 +57,7 @@ var C2C = {
       '<img class="cover" src="' + e(C2C.cover(g)) + '" alt="" loading="lazy" width="630" height="500">' +
       '<div class="body"><h3>' + e(g.title) + '</h3>' +
       '<p class="small">' + e(g.studio) + '</p>' +
-      '<div class="chips"><span class="chip">' + e(g.genre) + '</span><span class="chip">' + e(g.engine) + '</span><span class="chip">' + e(g.course) + '</span></div>' +
+      '<div class="chips">' + [g.genre, g.engine, g.course].filter(Boolean).map(function (t) { return '<span class="chip">' + e(t) + '</span>'; }).join('') + '</div>' +
       '<span class="more">Play &rarr;</span></div></a>';
   }
 };

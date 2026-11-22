@@ -84,6 +84,7 @@
     </div>
   </footer>
   <script src="assets/js/games.js"></script>
+  <script src="assets/js/games-auto.js"></script>
   <script src="assets/js/site.js"></script>
   <script>
     (function () {
@@ -92,8 +93,8 @@
       function set(i, t) { document.getElementById(i).textContent = t || ''; }
       if (!g) { set('g-title', 'Game not found'); set('g-studio', 'It may have moved. Head back to the Arcade.'); document.getElementById('g-player').hidden = true; return; }
       document.title = g.title + ' — Code to Create Arcade';
-      set('g-title', g.title); set('g-studio', 'by ' + g.studio); set('g-eyebrow', 'Student Arcade · ' + (g.year || ''));
-      set('g-pitch', g.pitch); set('g-controls', g.controls); set('g-tags', [g.genre, g.engine, g.course].join(' · '));
+      set('g-title', g.title); set('g-studio', 'by ' + g.studio); set('g-eyebrow', 'Student Arcade' + (g.year ? ' · ' + g.year : ''));
+      set('g-pitch', g.pitch); set('g-controls', g.controls); set('g-tags', [g.genre, g.engine, g.course].filter(Boolean).join(' · '));
       set('g-studio2', g.studio); set('g-team', g.team); set('g-credits', g.credits);
       var p = document.getElementById('g-player'); var asp = g.aspect || '16/9'; p.style.aspectRatio = asp;
       var parts = asp.split('/'); var ratio = parts[0] / (parts[1] || 1);

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Game Lab player — Code to Create</title>
+<style>
+  html, body { margin: 0; height: 100%; background: #0B1F3A; overflow: hidden; font-family: system-ui, sans-serif; }
+  body { display: flex; align-items: center; justify-content: center; }
+  #game { display: block; width: min(100vw, 100vh); height: min(100vw, 100vh); background: #000; outline: none; }
+  #start { position: fixed; inset: 0; display: flex; flex-direction: column; gap: 10px; align-items: center; justify-content: center;
+           background: rgba(11, 31, 58, .82); color: #fff; border: 0; cursor: pointer; font: 800 26px system-ui, sans-serif; width: 100%; }
+  #start span { font: 600 15px system-ui, sans-serif; color: #DCE4EF; }
+  #start::before { content: ""; width: 0; height: 0; border-left: 34px solid #C8102E; border-top: 22px solid transparent; border-bottom: 22px solid transparent; margin-bottom: 6px; }
+  #start[hidden] { display: none; }
+  #msg { position: fixed; left: 0; right: 0; bottom: 0; padding: 8px 12px; color: #FF8A9B; font-size: 13px; text-align: center; }
+</style>
+</head>
+<body>
+  <canvas id="game" width="400" height="400" tabindex="0" aria-label="Game"></canvas>
+  <button id="start" type="button">Click to play<span>Then use your keyboard and mouse</span></button>
+  <div id="msg" role="status"></div>
+
+  <script src="gamelab.js"></script>
+  <script>
+  /* Plays one Game Lab game from games/gamelab/<Name>/ with the GameLabJS runtime.
+     Used by the Arcade's game page: gamelab/play.html?game=<Name>                 */
+  (function () {
+    var name = new URLSearchParams(location.search).get('game') || '';
+    var msg = document.getElementById('msg');
+    var start = document.getElementById('start');
+    var canvas = document.getElementById('game');
+    if (!/^[A-Za-z0-9_\-]+$/.test(name)) { start.hidden = true; msg.textContent = 'No game chosen.'; return; }
+    var root = '../games/gamelab/' + name + '/';
+
+    GameLabJS.reset();
+    GameLabJS.configure({ canvas: canvas, gameRoot: root });
+
+    var s = document.createElement('script');
+    s.src = root + 'game.js';
+    s.onerror = function () { start.hidden = true; msg.textContent = 'Could not find games/gamelab/' + name + '/game.js'; };
+    s.onload = function () {
+      start.addEventListener('click', function () {
+        start.hidden = true;
+        canvas.focus();
+        GameLabJS.run();
+      });
+      start.focus();
+    };
+    document.body.appendChild(s);
+    canvas.addEventListener('mousedown', function () { canvas.focus(); });
+  })();
+  </script>
+</body>
+</html>

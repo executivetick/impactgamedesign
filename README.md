@@ -12,7 +12,7 @@ The teacher website for the Game Design pathway at the IMPACT Center for Leaders
    - Name it `codetocreate` (or anything you like). Set it to **Public**. Click **Create repository**.
 2. On the new repo's page, click **uploading an existing file**.
    Unzip this download, open the folder, select **everything inside it** (not the folder itself), and drag it onto the page. Click **Commit changes**.
-3. Go to **Settings → Pages**. Under *Build and deployment*, set **Source: Deploy from a branch**, **Branch: main**, folder **/ (root)**. Click **Save**.
+3. Go to **Settings → Pages**. Under *Build and deployment*, set **Source: GitHub Actions**. (The site's own workflow, `.github/workflows/deploy.yml`, builds the Arcade list and publishes the site on every upload.)
 4. Wait about a minute and refresh. GitHub shows your address:
    `https://YOUR-USERNAME.github.io/codetocreate/`
 
@@ -34,7 +34,9 @@ The teacher website for the Game Design pathway at the IMPACT Center for Leaders
 | `about.html` | About you and the program |
 | `assets/js/games.js` | **The game list.** The only file you edit to add a game. |
 | `assets/css/site.css` | Colors and fonts, all at the top of the file |
-| `games/` | One folder per game, holding its web build |
+| `games/gamelab/`, `games/unity/`, `games/html5/` | **Drop-in game folders.** Each one appears in the Arcade automatically. |
+| `gamelab/` | The GameLabJS runtime and player for Game Lab games |
+| `scripts/build-arcade.mjs` + `.github/workflows/deploy.yml` | Build the Arcade list and publish the site on every upload |
 
 To edit any page on GitHub, open the file, click the **pencil** icon, make the change, and click **Commit changes**. The live site updates in about a minute.
 
@@ -42,7 +44,28 @@ To edit any page on GitHub, open the file, click the **pencil** icon, make the c
 
 ---
 
-## Add a student game: use the Game Publisher
+## Add a student game: drop in a folder
+
+| Game made in | Upload the game folder to | Must contain |
+| --- | --- | --- |
+| Code.org Game Lab (GameLabJS) | `games/gamelab/` | `game.js` (+ an `assets/` folder for images) |
+| Unity (WebGL build) | `games/unity/` | `index.html` |
+| Godot, GDevelop, Twine, other HTML5 | `games/html5/` | `index.html` |
+
+1. Open the upload page for that folder, for example
+   `https://github.com/executivetick/impactgamedesign/upload/main/games/gamelab`
+2. Drag the game's folder in and click **Commit changes**.
+3. About a minute later, the game is in the Arcade with its own page.
+
+Each game folder can also have a **`cover.png`** (the Arcade card picture) and an **`info.json`** with the title, creator, genre, course and so on. The `README.md` inside each of those folders shows the format. Without them, the title comes from the folder name (`SpaceShooter` → "Space Shooter").
+
+**To remove a game:** delete its folder on GitHub, or add `"hidden": true` to its `info.json`.
+
+**If a game doesn't show up:** open the repo's **Actions** tab and click the latest run. Its "Build the Arcade game list" step lists every game it found and explains anything it skipped (a missing `game.js`, a folder name with spaces, a Brotli Unity build).
+
+**Code.org share links, Scratch and itch.io games** don't have folders. Add those with the Game Publisher, below.
+
+## The Game Publisher (for share links)
 
 Students don't submit games. You publish them with the **Game Publisher**, a page only you use. It's not linked anywhere on the site.
 
@@ -88,7 +111,7 @@ GitHub limits single files to 100 MB, and the whole site should stay under 1 GB.
 
 ## Preview on your own computer
 
-Opening `index.html` by double-clicking works for every page. Some browsers block games that load from your own disk, so to test a game locally, run `python3 -m http.server` in this folder and open `http://localhost:8000`.
+Opening `index.html` by double-clicking works for every page. Some browsers block games that load from your own disk, so to test a game locally, run `node scripts/build-arcade.mjs` (to refresh the game list), then `python3 -m http.server` in this folder, and open `http://localhost:8000`.
 
 ---
 
