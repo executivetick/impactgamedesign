@@ -47,18 +47,69 @@ var C2C = {
     var m = String(s).match(/https:\/\/studio\.code\.org\/projects\/(gamelab|applab|spritelab)\/([A-Za-z0-9_\-]+)/i);
     return m ? 'https://studio.code.org/projects/' + m[1].toLowerCase() + '/' + m[2] + '/embed' : '';
   },
-  // Code.org's embed is a fixed-size player (about 400 x 600 for Game Lab / Sprite Lab,
-  // a phone for App Lab). Size the frame to it exactly and center it.
+  // Code.org Game Lab / Sprite Lab: show only the game square (no white "Tap or click to run"
+  // box, empty control panel or footer), scaled up to fit, with our own title cover on top.
+  // The cover lets clicks pass through, so the player's one click starts the game.
+  // App Lab apps keep Code.org's full phone-shaped player.
+  CODEORG: { game: 400, border: 1, frameW: 402, frameH: 602, maxW: 560 },
   fitCodeorg: function (box, g) {
     if (!g.play || g.play.type !== 'codeorg') return;
-    var lab = (String(g.play.src).match(/projects\/(gamelab|applab|spritelab)\//i) || [])[1] || 'gamelab';
-    var size = lab.toLowerCase() === 'applab' ? [322, 562] : [402, 602];
-    box.style.aspectRatio = size[0] + ' / ' + size[1];
-    box.style.width = size[0] + 'px';
-    box.style.maxWidth = '100%';
+    var lab = ((String(g.play.src).match(/projects\/(gamelab|applab|spritelab)\//i) || [])[1] || 'gamelab').toLowerCase();
+    var frame = box.querySelector('iframe');
     box.style.marginInline = 'auto';
-    box.style.background = 'transparent';
-    box.style.borderRadius = '10px';
+    box.style.maxWidth = '100%';
+    if (lab === 'applab' || !frame) {
+      box.style.aspectRatio = '328 / 568'; box.style.width = '328px'; box.style.background = 'transparent';
+      return;
+    }
+    var C = C2C.CODEORG;
+    box.style.aspectRatio = '1 / 1';
+    box.style.width = C.maxW + 'px';
+    box.style.position = 'relative';
+    box.style.overflow = 'hidden';
+    box.style.background = '#0B1F3A';
+    frame.style.position = 'absolute';
+    frame.style.left = '0'; frame.style.top = '0';
+    frame.style.width = C.frameW + 'px'; frame.style.height = C.frameH + 'px';
+    frame.style.maxWidth = 'none';
+    frame.style.transformOrigin = '0 0';
+    function scale() {
+      var s = box.clientWidth / C.game;
+      frame.style.transform = 'scale(' + s + ') translate(' + (-C.border) + 'px,' + (-C.border) + 'px)';
+    }
+    scale();
+    window.addEventListener('resize', scale);
+    // the crop must never scroll (focus changes can try to)
+    box.addEventListener('scroll', function () { box.scrollTop = 0; box.scrollLeft = 0; });
+
+    // title cover
+    var cover = document.createElement('div');
+    cover.setAttribute('aria-hidden', 'true');
+    cover.style.cssText = 'position:absolute;inset:0;pointer-events:none;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;text-align:center;padding:24px;color:#fff;background:#0B1F3A center/cover no-repeat;transition:opacity .25s';
+    if (g.poster) {
+      cover.style.backgroundImage = 'url("' + g.poster + '")';
+      cover.innerHTML = '<span style="margin-top:auto;display:inline-flex;align-items:center;gap:10px;background:rgba(11,31,58,.88);border-radius:999px;padding:10px 20px;font:700 16px var(--font-body)">' +
+        '<span style="width:0;height:0;border-left:14px solid #C8102E;border-top:9px solid transparent;border-bottom:9px solid transparent"></span>Click to play</span>';
+    } else {
+      cover.innerHTML = '<span style="font:800 13px var(--font-body);letter-spacing:.14em;text-transform:uppercase;color:#FF8A9B">' + C2C.esc(g.engine || 'Game Lab') + '</span>' +
+        '<span style="font:800 clamp(28px,6vw,44px)/1.1 var(--font-head);max-width:90%">' + C2C.esc(g.title) + '</span>' +
+        (g.studio ? '<span style="color:#DCE4EF;font-size:15px">by ' + C2C.esc(g.studio) + '</span>' : '') +
+        '<span style="margin-top:18px;width:0;height:0;border-left:44px solid #C8102E;border-top:28px solid transparent;border-bottom:28px solid transparent"></span>' +
+        '<span style="font:700 18px var(--font-body)">Click to play</span>';
+    }
+    box.appendChild(cover);
+    window.addEventListener('blur', function () {
+      setTimeout(function () { if (document.activeElement === frame) { cover.style.opacity = '0'; setTimeout(function () { cover.hidden = true; }, 260); } }, 0);
+    });
+
+    // keep Code.org's credit
+    if (!box.nextElementSibling || !box.nextElementSibling.classList || !box.nextElementSibling.classList.contains('co-credit')) {
+      var credit = document.createElement('p');
+      credit.className = 'small co-credit';
+      credit.style.cssText = 'text-align:center;margin-top:6px';
+      credit.innerHTML = 'Built on <a href="' + C2C.esc(C2C.codeorgShare(g.play.src)) + '" target="_blank" rel="noopener">Code.org</a>';
+      box.insertAdjacentElement('afterend', credit);
+    }
   },
   // Game mode: while a game frame has keyboard focus, freeze page scrolling so the
   // arrow keys and Space move the game instead of the page. Clicking outside the game ends it.
@@ -66,8 +117,9 @@ var C2C = {
     var root = document.documentElement, on = false;
     function lock() {
       if (on) return; on = true;
-      var r = frame.getBoundingClientRect();
-      if (r.top < 70 || r.bottom > window.innerHeight) frame.scrollIntoView({ block: 'center', behavior: 'smooth' });
+      var box = frame.closest('.player') || frame;
+      var r = box.getBoundingClientRect();
+      if (r.top < 70 || r.bottom > window.innerHeight) window.scrollBy({ top: r.top + r.height / 2 - window.innerHeight / 2, behavior: 'smooth' });
       var bar = window.innerWidth - root.clientWidth;
       setTimeout(function () {
         if (!on) return;

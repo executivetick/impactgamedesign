@@ -100,13 +100,13 @@
       var p = document.getElementById('g-player'); var asp = g.aspect || '16/9'; p.style.aspectRatio = asp;
       var parts = asp.split('/'); var ratio = parts[0] / (parts[1] || 1);
       if (ratio < 1.3) { p.style.maxWidth = Math.round(620 * ratio) + 'px'; p.style.marginInline = 'auto'; }
-      C2C.fitCodeorg(p, g);
       if (g.play && g.play.type === 'codeorg') { var u = C2C.codeorgShare(g.play.src); if (u) { var co = document.getElementById('g-codeorg'); co.href = u; co.hidden = false; } }
       var src = C2C.safeSrc(g.play);
       if (src) {
         var f = document.createElement('iframe');
         f.src = src; f.title = g.title; f.setAttribute('allow', 'fullscreen; autoplay; gamepad'); f.allowFullscreen = true;
         p.appendChild(f);
+        C2C.fitCodeorg(p, g);
         C2C.gameMode(f, document.getElementById('g-mode'));
         document.getElementById('g-full').addEventListener('click', function () { (f.requestFullscreen || f.webkitRequestFullscreen || function(){}).call(f); });
       } else {

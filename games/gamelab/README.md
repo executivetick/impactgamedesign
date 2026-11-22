@@ -7,6 +7,7 @@ games/gamelab/
   SpaceShooter/
     link.txt         <- required: the Code.org share link
     cover.png        <- optional: the Arcade card picture (630 x 500 looks best)
+    title.png        <- optional: a screenshot of the game's title screen, shown before it starts
     info.json        <- optional: title, creator and more (see below)
 ```
 
@@ -16,6 +17,8 @@ games/gamelab/
 3. Go to `github.com/executivetick/impactgamedesign/upload/main/games/gamelab`, drag the folder in, and click **Commit changes**.
 
 The `_Example` folder shows both files. Folders starting with `_` are ignored by the Arcade.
+
+**The start screen:** the site shows only the game square, enlarged, with a "Click to play" screen on top. That screen shows the game's title, or your `title.png` if the folder has one. One click starts the game. To make `title.png`, run the game on Code.org and take a screenshot of just the game square (Windows: **Win + Shift + S**).
 
 App Lab and Sprite Lab links work here too. App Lab apps get a phone-shaped window automatically.
 

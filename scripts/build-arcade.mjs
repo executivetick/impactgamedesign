@@ -11,6 +11,7 @@
 //                   "credits", "devlog", "feedback", "aspect", "featured", "hidden",
 //                   "link" (Code.org share link, games/gamelab only) }
 //   cover.png / cover.jpg / cover.webp  -> the Arcade card image (630 x 500 looks best)
+//   title.png  -> Code.org games: a screenshot of the game's title screen, shown before it starts
 //
 // GitHub runs this automatically on every upload (.github/workflows/deploy.yml).
 // To preview on your own computer: node scripts/build-arcade.mjs
@@ -27,6 +28,7 @@ const KINDS = [
   { dir: 'games/html5', engine: 'HTML5', type: 'local', aspect: '16/9', entry: 'index.html' },
 ];
 const COVER = /^cover\.(png|jpe?g|webp|gif)$/i;
+const POSTER = /^title\.(png|jpe?g|webp|gif)$/i;
 const problems = [];
 
 const titleFromFolder = (name) => name
@@ -105,6 +107,7 @@ for (const kind of KINDS) {
     if (big.length) problems.push(`${rel}: files near GitHub's 100 MB limit: ${big.join(', ')}`);
 
     const cover = fs.readdirSync(abs).find((f) => COVER.test(f));
+    const poster = fs.readdirSync(abs).find((f) => POSTER.test(f));
     const id = `${kind.type === 'codeorg' ? 'codeorg' : slug(kind.engine)}-${slug(folder)}`;
     const play = co
       ? { type: 'codeorg', src: `https://studio.code.org/projects/${co.lab}/${co.id}` }
@@ -120,6 +123,7 @@ for (const kind of KINDS) {
       course: info.course || '',
       year: info.year || '',
       cover: cover ? urlPath(`${rel}/${cover}`) : '',
+      poster: poster ? urlPath(`${rel}/${poster}`) : '',
       pitch: info.pitch || '',
       controls: info.controls || '',
       play,
