@@ -140,6 +140,11 @@
         if (linkOk) {
           var a = document.createElement('a'); a.className = 'btn btn-red'; a.href = t.link; a.target = '_blank'; a.rel = 'noopener';
           a.textContent = 'Open ' + t.name; actions.appendChild(a);
+          if (t.use) {
+            var how = document.createElement('p'); how.className = 'small';
+            how.innerHTML = '<strong>First time:</strong> open it and add the skill to your Gemini. Then start any Gemini chat with <code>' + e(t.use) + '</code> followed by your question.';
+            actions.insertAdjacentElement('afterend', how);
+          }
         }
         var b = document.createElement('button'); b.type = 'button';
         b.className = linkOk ? 'btn btn-line' : 'btn btn-red';
