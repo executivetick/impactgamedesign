@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow">
-<title>Game Publisher — Code to Create (teacher only)</title>
+<title>Game Publisher — Game Design Pathway (teacher only)</title>
 <link rel="icon" type="image/png" href="../assets/img/favicon-64.png">
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../assets/css/site.css">
@@ -37,7 +37,7 @@
 <body>
 <header class="site-header" style="position:static">
   <div class="bar">
-    <a class="brand" href="../index.html"><img src="../assets/img/logo-code-to-create.png" alt="Code to Create" width="600" height="160"></a>
+    <a class="brand" href="../index.html"><img src="../assets/img/logo-code-to-create.png" alt="Game Design Pathway — Code to Create" width="565" height="160" style="height:52px;width:auto;object-fit:contain"></a>
     <span style="color:#DCE4EF;font-weight:700">Game Publisher &middot; teacher only</span>
   </div>
 </header>
@@ -145,7 +145,7 @@
     <h2 style="font-size:22px">How to get an access token (once a year)</h2>
     <ol style="margin:0;padding-left:20px;display:flex;flex-direction:column;gap:6px">
       <li>On github.com click your picture &rarr; <strong>Settings</strong> &rarr; <strong>Developer settings</strong> (bottom of the left menu) &rarr; <strong>Personal access tokens</strong> &rarr; <strong>Fine-grained tokens</strong> &rarr; <strong>Generate new token</strong>.</li>
-      <li>Name: <em>Code to Create publisher</em>. Expiration: up to a year.</li>
+      <li>Name: <em>Game Design Pathway publisher</em>. Expiration: up to a year.</li>
       <li><strong>Repository access:</strong> Only select repositories &rarr; <strong>impactgamedesign</strong>.</li>
       <li><strong>Permissions</strong> &rarr; Repository permissions &rarr; <strong>Contents: Read and write</strong>. Nothing else.</li>
       <li>Click <strong>Generate token</strong>, copy it, and paste it in step 1 above.</li>
@@ -278,7 +278,7 @@
     document.querySelectorAll('input[name=ptype]').forEach(function (r) { r.checked = r.value === t; });
     $('p-local').hidden = t !== 'local'; $('p-link').hidden = t === 'local';
     var info = {
-      codeorg: ['Code.org share link', 'In Code.org, the student clicks Share and copies the link. The site plays it with the code hidden. Sharing must be on for the student in your Code.org section.'],
+      codeorg: ['Code.org share link', 'In Code.org, the student clicks Share and copies the link. Sharing must be on for the student in your Code.org section.'],
       scratch: ['Scratch project link', 'The project page link, e.g. https://scratch.mit.edu/projects/123456789/ — the project must be shared.'],
       itch: ['itch.io embed link', 'On itch.io: Edit game → Distribute → Embed game, choose the option that embeds the game itself, and paste the code or the link (it contains embed-upload).']
     }[t];
