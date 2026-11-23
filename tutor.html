@@ -3,9 +3,9 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>AI Tutor Assistant — Code to Create</title>
+  <title>AI Tutor Assistant — Game Design Pathway</title>
   <meta name="description" content="AI tutors for Blender, Code.org Game Lab, App Lab and Unity/C#, built to coach students instead of doing the work.">
-  <meta property="og:title" content="AI Tutor Assistant — Code to Create">
+  <meta property="og:title" content="AI Tutor Assistant — Game Design Pathway">
   <meta property="og:description" content="AI tutors for Blender, Code.org Game Lab, App Lab and Unity/C#, built to coach students instead of doing the work.">
   <meta name="theme-color" content="#0B1F3A">
   <link rel="icon" type="image/png" href="assets/img/favicon-64.png">
@@ -19,7 +19,7 @@
   <a class="skip" href="#main">Skip to content</a>
   <header class="site-header">
     <div class="bar">
-      <a class="brand" href="index.html"><img src="assets/img/logo-code-to-create.png" alt="Code to Create — Game Design at IMPACT" width="600" height="160"></a>
+      <a class="brand" href="index.html"><img src="assets/img/logo-code-to-create.png" alt="Game Design Pathway at the IMPACT Center — Code to Create" width="600" height="160"></a>
       <button class="menu-btn" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="Menu">
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
       </button>
@@ -94,7 +94,7 @@
       </div>
       <div class="stack" style="gap:4px">
         <a href="https://impactcenter.warrencountyschools.org/">IMPACT Center website</a>
-        <span>&copy; <span id="year">2026</span> Code to Create</span>
+        <span>&copy; <span id="year">2026</span> Game Design Pathway &middot; IMPACT Center</span>
       </div>
     </div>
   </footer>
@@ -146,13 +146,13 @@
             actions.insertAdjacentElement('afterend', how);
           }
         }
-        var b = document.createElement('button'); b.type = 'button';
-        b.className = linkOk ? 'btn btn-line' : 'btn btn-red';
-        b.textContent = linkOk ? 'Copy tutor setup' : 'Copy tutor setup';
-        b.title = 'Copies the tutor instructions. Paste them as your first message in an approved AI chat.';
-        b.addEventListener('click', function () { copy(t.instructions, t.name + ' setup'); });
-        actions.appendChild(b);
         if (!linkOk) {
+          // No shared skill yet: fall back to copying the tutor's instructions into Gemini.
+          var b = document.createElement('button'); b.type = 'button'; b.className = 'btn btn-red';
+          b.textContent = 'Copy tutor setup';
+          b.title = 'Copies the tutor instructions. Paste them as your first message in Gemini.';
+          b.addEventListener('click', function () { copy(t.instructions, t.name + ' setup'); });
+          actions.appendChild(b);
           var g = document.createElement('a'); g.className = 'btn btn-line'; g.href = 'https://gemini.google.com/'; g.target = '_blank'; g.rel = 'noopener';
           g.textContent = 'Open Gemini'; actions.appendChild(g);
         }
